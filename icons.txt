@@ -1,0 +1,8 @@
+money:
+attach_money		dollar
+monetization_on		dollar circle
+money			100 bill
+euro_symbol
+credit_card
+account_balance		bank
+account_balance_wallet	wallet
