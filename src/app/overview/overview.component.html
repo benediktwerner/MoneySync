@@ -1,0 +1,67 @@
+<div class="grid-container">
+  <mat-card class="header">
+    <mat-card-title>
+      <div class="header-content">
+        <div>
+          <small>Total</small><br />
+          <app-balance [amount]="totalBalance | async"></app-balance>
+        </div>
+        <div style="text-align: center">
+          <small>Current Month</small><br />
+          <app-balance [amount]="currentMonthTotal | async"></app-balance>
+        </div>
+        <div style="text-align: right">
+          <small>Last Month</small><br />
+          <app-balance [amount]="lastMonthTotal | async"></app-balance>
+        </div>
+      </div>
+    </mat-card-title>
+  </mat-card>
+
+  <mat-card class="accounts">
+    <mat-card-title>Accounts</mat-card-title>
+    <mat-card-content>
+      <mat-action-list>
+        <ng-container *ngFor="let acc of (accounts | async); let last = last">
+          <button mat-list-item>
+            <mat-icon matListIcon>{{ acc.type | accountIcon }}</mat-icon>
+            <div class="two-col-list-item">
+              <span>{{ acc.name }}</span> <app-balance [amount]="acc.balance"></app-balance>
+            </div>
+          </button>
+          <mat-divider *ngIf="!last"></mat-divider>
+        </ng-container>
+      </mat-action-list>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="statistics">
+    <mat-card-title>Statistics</mat-card-title>
+    <mat-card-content> <p>Statistics here!</p> </mat-card-content>
+  </mat-card>
+
+  <mat-card class="transactions">
+    <mat-card-title>Transactions</mat-card-title>
+    <mat-card-content>
+      <mat-action-list>
+        <ng-container *ngFor="let transactionGroup of (transactions | async)">
+          <h3 mat-subheader class="transaction-date">{{ transactionGroup.key }}</h3>
+
+          <ng-container *ngFor="let transaction of transactionGroup.elements; let last = last">
+            <button mat-list-item (click)="showTransaction(transaction)">
+              <mat-icon matListIcon>{{ (transaction.category | async)?.icon }}</mat-icon>
+              <div class="two-col-list-item">
+                <div class="transaction-text">
+                  <div class="transaction-name">{{ transaction.name }}</div>
+                  <small class="transaction-category">{{ (transaction.category | async)?.name }}</small>
+                </div>
+                <app-balance [amount]="transaction.amount"></app-balance>
+              </div>
+            </button>
+            <mat-divider *ngIf="!last"></mat-divider>
+          </ng-container>
+        </ng-container>
+      </mat-action-list>
+    </mat-card-content>
+  </mat-card>
+</div>

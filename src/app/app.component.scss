@@ -1,0 +1,23 @@
+.toolbar-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  max-width: 1500px - 32px;
+}
+
+.nav-link {
+  font-size: 17px;
+}
+
+.router-outlet-wrapper {
+  padding: 20px;
+}
+
+
+
+.fab {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+}

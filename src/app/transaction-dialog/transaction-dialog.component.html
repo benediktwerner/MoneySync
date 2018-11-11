@@ -1,0 +1,23 @@
+<h1 matDialogTitle>{{ transaction.name }}</h1>
+
+<mat-dialog-content>
+  <mat-list>
+    <mat-list-item> <app-balance [amount]="transaction.amount"></app-balance> </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>{{ transaction.date | date: 'dd. MMM yyyy - HH:mm' }}</mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <mat-icon mat-list-icon>{{ (transaction.category | async)?.icon }}</mat-icon>
+      {{ (transaction.category | async)?.name }}
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <mat-icon mat-list-icon>{{ (transaction.account | async)?.type | accountIcon }}</mat-icon>
+      {{ (transaction.account | async)?.name }}
+    </mat-list-item>
+  </mat-list>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <span class="spacer"></span> <button mat-flat-button color="primary" mat-dialog-close>OK</button>
+</mat-dialog-actions>
