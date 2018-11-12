@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-left: auto;
+  margin-right: auto;
   width: 100%;
   max-width: 1500px - 32px;
 }
@@ -12,12 +14,27 @@
 
 .router-outlet-wrapper {
   padding: 20px;
+
+  @media (min-width: 1500px) {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
 }
 
-
-
-.fab {
+.fab-container {
   position: fixed;
-  right: 20px;
-  bottom: 20px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  padding: 20px;
+  flex-direction: row-reverse;
+  box-sizing: border-box;
+
+  @media (min-width: 1500px) {
+    max-width: 1500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
