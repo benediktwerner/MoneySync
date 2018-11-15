@@ -12,7 +12,7 @@
     </mat-list-item>
     <mat-divider></mat-divider>
     <mat-list-item>
-      <mat-icon mat-list-icon>{{ (transaction.account | async)?.type | accountIcon }}</mat-icon>
+      <mat-icon mat-list-icon>{{ (transaction.account | async)?.icon }}</mat-icon>
       {{ (transaction.account | async)?.name }}
     </mat-list-item>
   </mat-list>

@@ -14,7 +14,6 @@ import { environment } from '../environments/environment';
 import { OverviewComponent } from './overview/overview.component';
 import { TransactionsComponent } from './transactions/transactions.component';
 import { StatisticsComponent } from './statistics/statistics.component';
-import { AccountIconPipe } from './account-icon.pipe';
 import { BalanceComponent } from './balance/balance.component';
 import { AddTransactionDialogComponent } from './add-transaction-dialog/add-transaction-dialog.component';
 import { TransactionDialogComponent } from './transaction-dialog/transaction-dialog.component';
@@ -25,7 +24,6 @@ import { TransactionDialogComponent } from './transaction-dialog/transaction-dia
     OverviewComponent,
     TransactionsComponent,
     StatisticsComponent,
-    AccountIconPipe,
     BalanceComponent,
     AddTransactionDialogComponent,
     TransactionDialogComponent,

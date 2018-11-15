@@ -24,7 +24,7 @@
       <mat-action-list>
         <ng-container *ngFor="let acc of (accounts | async); let last = last">
           <button mat-list-item>
-            <mat-icon matListIcon>{{ acc.type | accountIcon }}</mat-icon>
+            <mat-icon matListIcon>{{ acc.icon }}</mat-icon>
             <div class="two-col-list-item">
               <span>{{ acc.name }}</span> <app-balance [amount]="acc.balance"></app-balance>
             </div>
