@@ -114,7 +114,8 @@ export class OverviewComponent implements OnInit {
     let diff = Math.floor((new Date().getTime() - date.getTime()) / 1000 / 60 / 60 / 24);
     if (diff < 0) return 'In the future';
     if (diff == 0) return 'Today';
-    if (diff <= 3) return `${diff} days ago`;
+    if (diff == 1) return 'Yesterday';
+    if (diff <= 5) return `${diff} days ago`;
     return formatDate(date, 'dd. MMM yyyy', 'en');
   }
 }
