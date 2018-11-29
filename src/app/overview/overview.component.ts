@@ -21,6 +21,7 @@ export class OverviewComponent implements OnInit {
   lastMonthTotal: Observable<number>;
 
   private chart;
+  private chartData;
 
   constructor(private dialog: MatDialog, data: DataService) {
     this.accounts = data.accounts;
@@ -49,17 +50,19 @@ export class OverviewComponent implements OnInit {
       let data = [];
       let total = 0;
 
-      for (const trans of transactions.sort((a, b) => b.date.getTime() - a.date.getTime())) {
-        total += trans.amount;
+      for (const trans of transactions.sort((a, b) => a.date.getTime() - b.date.getTime())) {
+        total = this.round(total + trans.amount);
         data.push({
           t: trans.date,
           y: total,
         });
       }
 
-      this.ensureChart();
-      this.chart.data.datasets[0].data = data;
-      this.chart.update();
+      this.chartData = data;
+      if (this.chart) {
+        this.chart.data.datasets[0].data = data;
+        this.chart.update();
+      }
     });
 
     this.totalBalance = data.totalBalance;
@@ -68,10 +71,10 @@ export class OverviewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.ensureChart();
+    this.createChart();
   }
 
-  ensureChart() {
+  createChart() {
     if (this.chart) return;
     this.chart = new Chart(document.getElementById('chart'), {
       type: 'line',
@@ -83,7 +86,7 @@ export class OverviewComponent implements OnInit {
             steppedLine: true,
             backgroundColor: 'rgb(54, 162, 235)',
             borderColor: 'rgb(54, 162, 235)',
-            data: [],
+            data: this.chartData || [],
           },
         ],
       },
@@ -117,5 +120,9 @@ export class OverviewComponent implements OnInit {
     if (diff == 1) return 'Yesterday';
     if (diff <= 5) return `${diff} days ago`;
     return formatDate(date, 'dd. MMM yyyy', 'en');
+  }
+
+  private round(number: number) {
+    return +number.toFixed(2);
   }
 }
