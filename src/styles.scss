@@ -1,5 +1,5 @@
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
-@import "~normalize.css/normalize.css";
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import '~normalize.css/normalize.css';
 
 a {
   text-decoration: none;
@@ -35,4 +35,12 @@ a {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+}
+
+.click-through {
+  pointer-events: none;
+
+  > * {
+    pointer-events: initial;
+  }
 }
