@@ -28,7 +28,7 @@ export interface User {}
 export interface AccountPlain {
   name: string;
   balance: number;
-  type: string;
+  icon: string;
 }
 
 export interface Account extends AccountPlain, Reference {}
@@ -74,7 +74,7 @@ export class DataService {
   private currDate: Date;
   private lastMonthDate: Date;
 
-  constructor(private db: AngularFirestore) {
+  constructor(db: AngularFirestore) {
     this.userCollection = db.doc<User>('users/bene');
     this.accountsCollection = this.userCollection.collection<AccountPlain>('accounts');
     this.transactionsCollection = this.userCollection.collection<TransactionPlain>('transactions');
