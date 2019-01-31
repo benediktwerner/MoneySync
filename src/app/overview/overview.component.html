@@ -22,14 +22,14 @@
     <mat-card-title>Accounts</mat-card-title>
     <mat-card-content>
       <mat-action-list>
-        <ng-container *ngFor="let acc of (accounts | async); let last = last">
+        <ng-container *ngFor="let acc of (accounts | async); last as isLast">
           <button mat-list-item>
             <mat-icon matListIcon>{{ acc.icon }}</mat-icon>
             <div class="two-col-list-item">
               <span>{{ acc.name }}</span> <app-balance [amount]="acc.balance"></app-balance>
             </div>
           </button>
-          <mat-divider *ngIf="!last"></mat-divider>
+          <mat-divider *ngIf="!isLast"></mat-divider>
         </ng-container>
       </mat-action-list>
     </mat-card-content>
@@ -44,10 +44,10 @@
     <mat-card-title>Transactions</mat-card-title>
     <mat-card-content>
       <mat-action-list>
-        <ng-container *ngFor="let transactionGroup of (transactions | async)">
-          <h3 mat-subheader class="transaction-date">{{ transactionGroup.key }}</h3>
+        <ng-container *ngFor="let item of (transactionsByDate | async)">
+          <h3 mat-subheader class="transaction-date">{{ item.key }}</h3>
 
-          <ng-container *ngFor="let transaction of transactionGroup.elements; let last = last">
+          <ng-container *ngFor="let transaction of item.value; last as isLast">
             <button mat-list-item (click)="showTransaction(transaction)">
               <mat-icon matListIcon>{{ (transaction.category | async)?.icon }}</mat-icon>
               <div class="two-col-list-item">
@@ -58,7 +58,7 @@
                 <app-balance [amount]="transaction.amount"></app-balance>
               </div>
             </button>
-            <mat-divider *ngIf="!last"></mat-divider>
+            <mat-divider *ngIf="!isLast"></mat-divider>
           </ng-container>
         </ng-container>
       </mat-action-list>

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
   DocumentReference,
-  DocumentChangeAction,
   AngularFirestoreDocument,
   AngularFirestoreCollection,
 } from '@angular/fire/firestore';
@@ -19,21 +18,23 @@ Date.prototype.hasSameMonthAs = function(other: Date) {
   return this.getUTCFullYear() == other.getUTCFullYear() && this.getUTCMonth() == other.getUTCMonth();
 };
 
-export interface Reference {
-  reference: DocumentReference;
-}
-
 export interface User {}
 
-export interface AccountPlain {
+export interface Account {
+  id: string;
   name: string;
   balance: number;
   icon: string;
 }
 
-export interface Account extends AccountPlain, Reference {}
+export interface Category {
+  id: string;
+  name: string;
+  icon: string;
+}
 
 export interface TransactionPlain {
+  id: string;
   name: string;
   amount: number;
   timestamp: any;
@@ -41,18 +42,11 @@ export interface TransactionPlain {
   categoryRef: DocumentReference;
 }
 
-export interface Transaction extends TransactionPlain, Reference {
+export interface Transaction extends TransactionPlain {
   date: Date;
-  account: Observable<AccountPlain>;
-  category: Observable<CategoryPlain>;
+  account: Observable<Account>;
+  category: Observable<Category>;
 }
-
-export interface CategoryPlain {
-  name: string;
-  icon: string;
-}
-
-export interface Category extends CategoryPlain, Reference {}
 
 @Injectable({
   providedIn: 'root',
@@ -67,66 +61,50 @@ export class DataService {
   lastMonthTotal: Observable<number>;
 
   userCollection: AngularFirestoreDocument<User>;
-  accountsCollection: AngularFirestoreCollection<AccountPlain>;
+  accountsCollection: AngularFirestoreCollection<Account>;
+  categoriesCollection: AngularFirestoreCollection<Category>;
   transactionsCollection: AngularFirestoreCollection<TransactionPlain>;
-  categoriesCollection: AngularFirestoreCollection<CategoryPlain>;
 
   private currDate: Date;
   private lastMonthDate: Date;
 
-  constructor(db: AngularFirestore) {
+  constructor(private db: AngularFirestore) {
     this.userCollection = db.doc<User>('users/bene');
-    this.accountsCollection = this.userCollection.collection<AccountPlain>('accounts');
+    this.accountsCollection = this.userCollection.collection<Account>('accounts');
+    this.categoriesCollection = this.userCollection.collection<Category>('categories');
     this.transactionsCollection = this.userCollection.collection<TransactionPlain>('transactions');
-    this.categoriesCollection = this.userCollection.collection<CategoryPlain>('categories');
 
-    function mapReference<T extends object, R extends Reference>() {
-      return map<DocumentChangeAction<T>[], R[]>(arr =>
-        arr.map(action => {
-          const data = action.payload.doc.data();
-          const reference = action.payload.doc.ref;
-          return { reference, ...(data as object) } as R;
-        })
-      );
-    }
-
-    this.accounts = this.accountsCollection.snapshotChanges().pipe(
-      mapReference<AccountPlain, Account>(),
-      shareReplay(1)
-    );
-
-    this.transactions = this.transactionsCollection.snapshotChanges().pipe(
+    this.accounts = this.accountsCollection.valueChanges().pipe(shareReplay(1));
+    this.categories = this.categoriesCollection.valueChanges().pipe(shareReplay(1));
+    this.transactions = this.transactionsCollection.valueChanges().pipe(
       map(arr =>
-        arr.map(action => {
-          const trans = action.payload.doc.data();
-          const reference = action.payload.doc.ref;
+        arr.map(trans => {
           const date = trans.timestamp.toDate();
           const account = this.accountsCollection
-            .doc<AccountPlain>(trans.accountRef.id)
+            .doc<Account>(trans.accountRef.id)
             .valueChanges()
             .pipe(shareReplay(1));
           const category = this.categoriesCollection
-            .doc<CategoryPlain>(trans.categoryRef.id)
+            .doc<Category>(trans.categoryRef.id)
             .valueChanges()
             .pipe(shareReplay(1));
-          return { account, category, date, reference, ...trans };
+          return { account, category, date, ...trans };
         })
       ),
       shareReplay(1)
     );
 
-    this.categories = this.categoriesCollection.snapshotChanges().pipe(
-      mapReference<CategoryPlain, Category>(),
+    this.totalBalance = this.accounts.pipe(
+      map(arr => arr.reduce((total, current) => total + current.balance, 0)),
       shareReplay(1)
     );
-
-    this.totalBalance = this.accounts.pipe(map(arr => arr.reduce((total, current) => total + current.balance, 0)));
 
     let updateDate = tap(() => {
       this.currDate = new Date();
       this.lastMonthDate = new Date();
       this.lastMonthDate.setMonth(this.lastMonthDate.getMonth() - 1);
     });
+
     this.currentMonthTotal = this.transactions.pipe(
       updateDate,
       map<Transaction[], number>(arr =>
@@ -134,6 +112,7 @@ export class DataService {
       ),
       shareReplay(1)
     );
+
     this.lastMonthTotal = this.transactions.pipe(
       updateDate,
       map<Transaction[], number>(arr =>
@@ -146,7 +125,8 @@ export class DataService {
     );
   }
 
-  addTransaction(transaction) {
-    this.transactionsCollection.add(transaction);
+  addTransaction(transaction: TransactionPlain) {
+    transaction.id = this.db.createId();
+    this.transactionsCollection.doc<TransactionPlain>(transaction.id).set(transaction);
   }
 }

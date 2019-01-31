@@ -16,20 +16,20 @@
     <br />
 
     <mat-form-field>
-      <mat-select formControlName="category" placeholder="Category">
-        <ng-container *ngFor="let cat of (categories | async)">
-          <mat-option [value]="cat.reference">{{ cat.name }}</mat-option>
-        </ng-container>
+      <mat-select placeholder="Category" [formControl]="form.controls.category">
+        <mat-option *ngFor="let cat of (categories | async)" [value]="cat.id">
+          {{ cat.name }}
+        </mat-option>
       </mat-select>
       <mat-error *ngIf="form.controls.category.errors?.required">Category is required</mat-error>
     </mat-form-field>
     <br />
 
     <mat-form-field>
-      <mat-select formControlName="account" placeholder="Account">
-        <ng-container *ngFor="let acc of (accounts | async)">
-          <mat-option [value]="acc.reference">{{ acc.name }}</mat-option>
-        </ng-container>
+      <mat-select placeholder="Account" [formControl]="form.controls.account">
+        <mat-option *ngFor="let acc of (accounts | async)" [value]="acc.id">
+          {{ acc.name }}
+        </mat-option>
       </mat-select>
       <mat-error *ngIf="form.controls.account.errors?.required">Account is required</mat-error>
     </mat-form-field>

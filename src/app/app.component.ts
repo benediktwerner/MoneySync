@@ -23,7 +23,7 @@ export class AppComponent {
     });
   }
 
-  showMessage(message, action = 'OK', onAction = null) {
+  showMessage(message: string, action = 'OK', onAction = null) {
     let snackBarRef = this.snackBar.open(message, action);
 
     if (onAction) {

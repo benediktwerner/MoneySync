@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { formatDate } from '@angular/common';
+import { formatDate, KeyValue } from '@angular/common';
 import { Observable } from 'rxjs';
 import { DataService, Account, Transaction } from '../data.service';
 import { map } from 'rxjs/operators';
@@ -14,7 +14,7 @@ import { Chart } from 'chart.js';
 })
 export class OverviewComponent implements OnInit {
   accounts: Observable<Account[]>;
-  transactions: Observable<{ key: string; elements: Transaction[] }[]>;
+  transactionsByDate: Observable<KeyValue<string, Transaction>[]>;
 
   totalBalance: Observable<number>;
   currentMonthTotal: Observable<number>;
@@ -25,21 +25,20 @@ export class OverviewComponent implements OnInit {
 
   constructor(private dialog: MatDialog, data: DataService) {
     this.accounts = data.accounts;
-    this.transactions = data.transactions.pipe(
+    this.transactionsByDate = data.transactions.pipe(
       map(arr => {
         let groups = {};
         let result = [];
+        const transactionsSorted = arr.sort((a, b) => b.date.getTime() - a.date.getTime());
 
-        for (let trans of arr.sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, 10)) {
-          let key = this.daysAgo(trans.date);
-          if (!groups[key]) {
-            let newGroup = [trans];
-            groups[key] = newGroup;
-            result.push({
-              key: key,
-              elements: newGroup,
-            });
-          } else groups[key].push(trans);
+        for (let trans of transactionsSorted.slice(0, 10)) {
+          let key = daysAgo(trans.date);
+          if (key in groups) {
+            groups[key].value.push(trans);
+          } else {
+            groups[key] = { key, value: [trans] };
+            result.push(groups[key]);
+          }
         }
 
         return result;
@@ -51,7 +50,7 @@ export class OverviewComponent implements OnInit {
       let total = 0;
 
       for (const trans of transactions.sort((a, b) => a.date.getTime() - b.date.getTime())) {
-        total = this.round(total + trans.amount);
+        total = round(total + trans.amount);
         data.push({
           t: trans.date,
           y: total,
@@ -107,22 +106,22 @@ export class OverviewComponent implements OnInit {
     });
   }
 
-  showTransaction(transaction) {
+  showTransaction(transaction: Transaction) {
     this.dialog.open(TransactionDialogComponent, {
       data: transaction,
     });
   }
+}
 
-  private daysAgo(date: Date) {
-    let diff = Math.floor((new Date().getTime() - date.getTime()) / 1000 / 60 / 60 / 24);
-    if (diff < 0) return 'In the future';
-    if (diff == 0) return 'Today';
-    if (diff == 1) return 'Yesterday';
-    if (diff <= 5) return `${diff} days ago`;
-    return formatDate(date, 'dd. MMM yyyy', 'en');
-  }
+function daysAgo(date: Date) {
+  let diff = Math.floor((new Date().getTime() - date.getTime()) / 1000 / 60 / 60 / 24);
+  if (diff < 0) return 'In the future';
+  if (diff == 0) return 'Today';
+  if (diff == 1) return 'Yesterday';
+  if (diff <= 5) return `${diff} days ago`;
+  return formatDate(date, 'dd. MMM yyyy', 'en');
+}
 
-  private round(number: number) {
-    return +number.toFixed(2);
-  }
+function round(number: number) {
+  return +number.toFixed(2);
 }
