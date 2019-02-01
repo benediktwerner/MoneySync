@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  AngularFirestore,
-  AngularFirestoreDocument,
-  AngularFirestoreCollection,
-} from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { tap, map, shareReplay } from 'rxjs/operators';
 
@@ -127,6 +123,10 @@ export class DataService {
   addTransaction(transaction: TransactionPlain) {
     transaction.id = this.db.createId();
     this.transactionsCollection.doc<TransactionPlain>(transaction.id).set(transaction);
+  }
+
+  updateTransaction(transaction: TransactionPlain) {
+    this.transactionsCollection.doc<TransactionPlain>(transaction.id).update(transaction);
   }
 
   removeTransaction(transaction: Transaction) {

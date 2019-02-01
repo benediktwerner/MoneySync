@@ -32,11 +32,6 @@ export class AppComponent {
   }
 
   addTransaction() {
-    this.dialog
-      .open(AddTransactionDialogComponent)
-      .afterClosed()
-      .subscribe(result => {
-        if (result) this.data.addTransaction(result);
-      });
+    this.dialog.open(AddTransactionDialogComponent);
   }
 }

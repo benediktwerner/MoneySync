@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Transaction, DataService } from '../../../data.service';
 import { DeletionDialogComponent } from '../../../ui/deletion-dialog/deletion-dialog.component';
+import { EditTransactionsDialogComponent } from '../edit-transactions-dialog/edit-transactions-dialog.component';
 
 @Component({
   selector: 'app-transaction-dialog',
@@ -18,7 +19,10 @@ export class TransactionDialogComponent {
     private dialog: MatDialog
   ) {}
 
-  onEdit() {}
+  onEdit() {
+    this.dialogRef.close();
+    this.dialog.open(EditTransactionsDialogComponent, { data: this.transaction });
+  }
 
   onDelete() {
     this.dialog
