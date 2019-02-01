@@ -25,7 +25,7 @@ export class AddTransactionDialogComponent {
     this.form = formBuilder.group({
       name: ['', Validators.required],
       amount: ['', Validators.required],
-      account: ['', Validators.required],
+      account: [data.user.defaultAccount, Validators.required],
       category: ['', Validators.required],
     });
   }

@@ -16,7 +16,9 @@ export interface Dict<T> {
   [key: string]: T;
 }
 
-export interface User {}
+export interface User {
+  defaultAccount: string;
+}
 
 export interface Account {
   id: string;
@@ -44,6 +46,7 @@ export interface Transaction {
   providedIn: 'root',
 })
 export class DataService {
+  user: User = null;
   accounts: Dict<Account> = {};
   categories: Dict<Category> = {};
   transactions: Dict<Transaction> = {};
@@ -56,21 +59,24 @@ export class DataService {
   currentMonthTotal: number = 0;
   lastMonthTotal: number = 0;
 
-  userCollection: AngularFirestoreDocument<User>;
+  userDoc: AngularFirestoreDocument<User>;
   accountsCollection: AngularFirestoreCollection<Account>;
   categoriesCollection: AngularFirestoreCollection<Category>;
   transactionsCollection: AngularFirestoreCollection<Transaction>;
 
   constructor(private db: AngularFirestore) {
-    this.userCollection = db.doc<User>('users/bene');
-    this.accountsCollection = this.userCollection.collection<Account>('accounts');
-    this.categoriesCollection = this.userCollection.collection<Category>('categories');
-    this.transactionsCollection = this.userCollection.collection<Transaction>('transactions');
+    this.userDoc = db.doc<User>('users/bene');
+    this.accountsCollection = this.userDoc.collection<Account>('accounts');
+    this.categoriesCollection = this.userDoc.collection<Category>('categories');
+    this.transactionsCollection = this.userDoc.collection<Transaction>('transactions');
 
     this.onAccountsChange = new BehaviorSubject(Object.values(this.accounts));
     this.onCategoriesChange = new BehaviorSubject(Object.values(this.categories));
     this.onTransactionsChange = new BehaviorSubject(Object.values(this.transactions));
 
+    this.userDoc.valueChanges().subscribe(user => {
+      this.user = user;
+    });
     this.accountsCollection.valueChanges().subscribe(accs => {
       const accounts = {};
       accs.forEach(acc => (accounts[acc.id] = acc));
@@ -152,6 +158,13 @@ export class DataService {
         if (trans.accountId == id) batch.delete(this.transactionsCollection.doc(trans.id).ref);
       });
     }
+
+    if (this.user.defaultAccount == id) {
+      const accounts = Object.values(this.accounts);
+      if (accounts.length > 1) batch.set(this.userDoc.ref, { defaultAccount: accounts.find(acc => acc.id != id).id });
+      else batch.set(this.userDoc.ref, { defaultAccount: '' });
+    }
+
     batch.delete(this.accountsCollection.doc<Account>(id).ref);
     return batch.commit();
   }
