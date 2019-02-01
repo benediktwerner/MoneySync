@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Transaction, DataService } from '../../../data.service';
 import { DeletionDialogComponent } from '../../../ui/deletion-dialog/deletion-dialog.component';
-import { EditTransactionsDialogComponent } from '../edit-transactions-dialog/edit-transactions-dialog.component';
+import { EditTransactionDialogComponent } from '../edit-transaction-dialog/edit-transaction-dialog.component';
 
 @Component({
   selector: 'app-transaction-dialog',
@@ -20,8 +20,12 @@ export class TransactionDialogComponent {
   ) {}
 
   onEdit() {
-    this.dialogRef.close();
-    this.dialog.open(EditTransactionsDialogComponent, { data: this.transaction });
+    this.dialog
+      .open(EditTransactionDialogComponent, { data: this.transaction })
+      .beforeClose()
+      .subscribe(result => {
+        if (result) this.dialogRef.close();
+      });
   }
 
   onDelete() {

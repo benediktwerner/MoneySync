@@ -6,19 +6,20 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { AddTransactionDialogComponent } from '../add-transaction-dialog/add-transaction-dialog.component';
 
 @Component({
-  selector: 'app-edit-transactions-dialog',
-  templateUrl: './edit-transactions-dialog.component.html',
-  styleUrls: ['./edit-transactions-dialog.component.scss'],
+  selector: 'app-edit-transaction-dialog',
+  templateUrl: './edit-transaction-dialog.component.html',
+  styleUrls: ['./edit-transaction-dialog.component.scss'],
 })
-export class EditTransactionsDialogComponent {
+export class EditTransactionDialogComponent {
   form: FormGroup;
 
   accounts: Observable<Account[]>;
   categories: Observable<Category[]>;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) private transaction: Transaction,
-    private dialogRef: MatDialogRef<AddTransactionDialogComponent, TransactionPlain>,
+    @Inject(MAT_DIALOG_DATA)
+    private transaction: Transaction,
+    private dialogRef: MatDialogRef<AddTransactionDialogComponent>,
     private data: DataService,
     formBuilder: FormBuilder
   ) {
@@ -44,6 +45,6 @@ export class EditTransactionsDialogComponent {
       categoryId: this.form.controls.category.value,
       timestamp: this.transaction.timestamp,
     });
-    this.dialogRef.close();
+    this.dialogRef.close(true);
   }
 }
