@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { DataService, Account, Transaction } from '../data.service';
 import { map } from 'rxjs/operators';
 import { MatDialog } from '@angular/material';
-import { TransactionDialogComponent } from '../transaction-dialog/transaction-dialog.component';
+import { TransactionDialogComponent } from '../transactions/components/transaction-dialog/transaction-dialog.component';
 import { Chart } from 'chart.js';
 
 @Component({

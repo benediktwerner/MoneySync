@@ -4,15 +4,15 @@
       <div class="header-content">
         <div>
           <small>Total</small><br />
-          <app-balance [amount]="totalBalance | async"></app-balance>
+          <app-currency [amount]="totalBalance | async"></app-currency>
         </div>
         <div style="text-align: center">
           <small>Current Month</small><br />
-          <app-balance [amount]="currentMonthTotal | async"></app-balance>
+          <app-currency [amount]="currentMonthTotal | async"></app-currency>
         </div>
         <div style="text-align: right">
           <small>Last Month</small><br />
-          <app-balance [amount]="lastMonthTotal | async"></app-balance>
+          <app-currency [amount]="lastMonthTotal | async"></app-currency>
         </div>
       </div>
     </mat-card-title>
@@ -26,7 +26,7 @@
           <button mat-list-item>
             <mat-icon matListIcon>{{ acc.icon }}</mat-icon>
             <div class="two-col-list-item">
-              <span>{{ acc.name }}</span> <app-balance [amount]="acc.balance"></app-balance>
+              <span>{{ acc.name }}</span> <app-currency [amount]="acc.balance"></app-currency>
             </div>
           </button>
           <mat-divider *ngIf="!isLast"></mat-divider>
@@ -55,7 +55,7 @@
                   <div class="transaction-name">{{ transaction.name }}</div>
                   <small class="transaction-category">{{ (transaction.category | async)?.name }}</small>
                 </div>
-                <app-balance [amount]="transaction.amount"></app-balance>
+                <app-currency [amount]="transaction.amount"></app-currency>
               </div>
             </button>
             <mat-divider *ngIf="!isLast"></mat-divider>

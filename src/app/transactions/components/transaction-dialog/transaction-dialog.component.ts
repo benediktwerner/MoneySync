@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Transaction, DataService } from '../data.service';
-import { DeletionDialogComponent } from '../deletion-dialog/deletion-dialog.component';
+import { Transaction, DataService } from '../../../data.service';
+import { DeletionDialogComponent } from '../../../ui/deletion-dialog/deletion-dialog.component';
 
 @Component({
   selector: 'app-transaction-dialog',

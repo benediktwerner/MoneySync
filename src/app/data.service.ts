@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
-  DocumentReference,
   AngularFirestoreDocument,
   AngularFirestoreCollection,
 } from '@angular/fire/firestore';
@@ -38,8 +37,8 @@ export interface TransactionPlain {
   name: string;
   amount: number;
   timestamp: any;
-  accountRef: DocumentReference;
-  categoryRef: DocumentReference;
+  accountId: string;
+  categoryId: string;
 }
 
 export interface Transaction extends TransactionPlain {
@@ -81,11 +80,11 @@ export class DataService {
         arr.map(trans => {
           const date = trans.timestamp.toDate();
           const account = this.accountsCollection
-            .doc<Account>(trans.accountRef.id)
+            .doc<Account>(trans.accountId)
             .valueChanges()
             .pipe(shareReplay(1));
           const category = this.categoriesCollection
-            .doc<Category>(trans.categoryRef.id)
+            .doc<Category>(trans.categoryId)
             .valueChanges()
             .pipe(shareReplay(1));
           return { account, category, date, ...trans };

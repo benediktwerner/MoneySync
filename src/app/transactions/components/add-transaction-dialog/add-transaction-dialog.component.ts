@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
-import { DataService, Account, Category } from '../data.service';
+import { DataService, Account, Category, TransactionPlain } from '../../../data.service';
 import { Observable } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -16,7 +16,7 @@ export class AddTransactionDialogComponent {
   categories: Observable<Category[]>;
 
   constructor(
-    private dialogRef: MatDialogRef<AddTransactionDialogComponent>,
+    private dialogRef: MatDialogRef<AddTransactionDialogComponent, TransactionPlain>,
     data: DataService,
     formBuilder: FormBuilder
   ) {
@@ -35,10 +35,11 @@ export class AddTransactionDialogComponent {
     if (this.form.invalid) return;
 
     this.dialogRef.close({
+      id: null,
       name: this.form.controls.name.value,
       amount: this.form.controls.amount.value,
-      accountRef: this.form.controls.account.value,
-      categoryRef: this.form.controls.category.value,
+      accountId: this.form.controls.account.value,
+      categoryId: this.form.controls.category.value,
       timestamp: new Date(),
     });
   }
