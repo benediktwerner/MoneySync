@@ -9,7 +9,7 @@
     <br />
 
     <mat-form-field class="full-width">
-      <input matInput placeholder="Icon" formControlName="icon" />
+      <app-icon-selector formControlName="icon"></app-icon-selector>
       <mat-error *ngIf="form.controls.icon.errors?.required">Icon is required</mat-error>
     </mat-form-field>
     <br />

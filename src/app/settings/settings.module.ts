@@ -6,6 +6,7 @@ import { CategoriesSettingsComponent } from './categories-settings/categories-se
 import { AppRoutingModule } from '../app-routing.module';
 import { MaterialModule } from '../material.module';
 import { CurrencyModule } from '../ui/currency/currency.module';
+import { IconSelectorModule } from '../ui/icon-selector/icon-selector.module';
 import { DefaultAccountDialogComponent } from './default-account-dialog/default-account-dialog.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AddCategoryDialogComponent } from './add-category-dialog/add-category-dialog.component';
@@ -30,6 +31,7 @@ import { DeletionDialogModule } from '../ui/deletion-dialog/deletion-dialog.modu
     AppRoutingModule,
     MaterialModule,
     CurrencyModule,
+    IconSelectorModule,
     DeletionDialogModule,
   ],
   exports: [SettingsComponent, AccountsSettingsComponent, CategoriesSettingsComponent],

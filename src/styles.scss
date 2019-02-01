@@ -39,6 +39,10 @@ $spacers: 0 0.25 0.5 1 1.5 3;
   margin-left: -8px;
 }
 
+.mat-form-field-infix {
+  min-width: 250px !important;
+}
+
 .two-col-list-item {
   width: 100%;
   display: flex;
