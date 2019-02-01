@@ -1,0 +1,23 @@
+<div class="grid-container">
+  <mat-card class="sidenav">
+    <mat-card-title>Settings</mat-card-title>
+
+    <mat-card-content>
+      <mat-action-list>
+        <button mat-list-item color="primary" routerLink="accounts" routerLinkActive="active">
+          <mat-icon matListIcon>account_circle</mat-icon>
+          <div class="two-col-list-item">Accounts</div>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-list-item routerLink="categories" routerLinkActive="active">
+          <mat-icon matListIcon>category</mat-icon>
+          <div class="two-col-list-item">Categories</div>
+        </button>
+      </mat-action-list>
+    </mat-card-content>
+  </mat-card>
+
+  <div>
+    <router-outlet></router-outlet>
+  </div>
+</div>

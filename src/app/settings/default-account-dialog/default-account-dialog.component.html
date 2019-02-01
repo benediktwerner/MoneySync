@@ -1,0 +1,19 @@
+<h1 matDialogTitle>Select default account</h1>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-dialog-content>
+    <mat-form-field>
+      <mat-select [formControl]="form.controls.defaultAccount">
+        <mat-option *ngFor="let acc of accounts" [value]="acc.id">
+          {{ acc.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close>CANCEL</button>
+    <span class="spacer"></span>
+    <button mat-flat-button color="primary" type="submit">ADD</button>
+  </mat-dialog-actions>
+</form>

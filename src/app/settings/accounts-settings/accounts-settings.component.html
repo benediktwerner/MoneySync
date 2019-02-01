@@ -1,0 +1,24 @@
+<mat-card>
+  <mat-card-title class="d-flex">
+    Accounts
+    <span class="spacer"></span>
+    <button mat-button (click)="selectDefaultAcc()">SELECT DEFAULT ACCOUNT</button>
+  </mat-card-title>
+  <mat-card-content>
+    <mat-action-list>
+      <ng-container *ngFor="let acc of (accounts | async)">
+        <button mat-list-item (click)="showAccount(acc)" [class.active]="acc.id == (defaultAccount | async)">
+          <mat-icon matListIcon>{{ acc.icon }}</mat-icon>
+          <div class="two-col-list-item">
+            <span>{{ acc.name }}</span> <app-currency [amount]="acc.balance"></app-currency>
+          </div>
+        </button>
+        <mat-divider></mat-divider>
+      </ng-container>
+      <button mat-list-item (click)="addAccount()">
+        <mat-icon matListIcon>add</mat-icon>
+        <div class="two-col-list-item">Add account</div>
+      </button>
+    </mat-action-list>
+  </mat-card-content>
+</mat-card>

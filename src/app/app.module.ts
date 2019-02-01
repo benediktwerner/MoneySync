@@ -13,6 +13,7 @@ import { OverviewModule } from './overview/overview.module';
 import { StatisticsModule } from './statistics/statistics.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { AccountsModule } from './accounts/accounts.module';
+import { SettingsModule } from './settings/settings.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,6 +29,7 @@ import { AccountsModule } from './accounts/accounts.module';
     OverviewModule,
     StatisticsModule,
     AccountsModule,
+    SettingsModule,
     TransactionsModule,
   ],
   providers: [],

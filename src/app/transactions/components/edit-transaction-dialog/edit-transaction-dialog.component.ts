@@ -29,7 +29,7 @@ export class EditTransactionDialogComponent {
       name: [transaction.name, Validators.required],
       amount: [transaction.amount, Validators.required],
       account: [transaction.accountId, Validators.required],
-      category: [transaction.categoryId, Validators.required],
+      category: [transaction.categoryId],
     });
   }
 

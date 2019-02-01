@@ -46,11 +46,12 @@ export interface Transaction {
   providedIn: 'root',
 })
 export class DataService {
-  user: User = null;
+  user: User = { defaultAccount: '' };
   accounts: Dict<Account> = {};
   categories: Dict<Category> = {};
   transactions: Dict<Transaction> = {};
 
+  onUserChange: BehaviorSubject<User>;
   onAccountsChange: BehaviorSubject<Account[]>;
   onCategoriesChange: BehaviorSubject<Category[]>;
   onTransactionsChange: BehaviorSubject<Transaction[]>;
@@ -70,12 +71,14 @@ export class DataService {
     this.categoriesCollection = this.userDoc.collection<Category>('categories');
     this.transactionsCollection = this.userDoc.collection<Transaction>('transactions');
 
+    this.onUserChange = new BehaviorSubject(this.user);
     this.onAccountsChange = new BehaviorSubject(Object.values(this.accounts));
     this.onCategoriesChange = new BehaviorSubject(Object.values(this.categories));
     this.onTransactionsChange = new BehaviorSubject(Object.values(this.transactions));
 
     this.userDoc.valueChanges().subscribe(user => {
       this.user = user;
+      this.onUserChange.next(user);
     });
     this.accountsCollection.valueChanges().subscribe(accs => {
       const accounts = {};
@@ -167,5 +170,22 @@ export class DataService {
 
     batch.delete(this.accountsCollection.doc<Account>(id).ref);
     return batch.commit();
+  }
+
+  setDefaultAccount(id: string) {
+    this.userDoc.update({ defaultAccount: id });
+  }
+
+  addCategory(category: Category) {
+    category.id = this.db.createId();
+    this.categoriesCollection.doc<Category>(category.id).set(category);
+  }
+
+  updateCategory(category: Category) {
+    this.categoriesCollection.doc<Category>(category.id).update(category);
+  }
+
+  removeCategory(id: string) {
+    this.categoriesCollection.doc<Category>(id).delete();
   }
 }

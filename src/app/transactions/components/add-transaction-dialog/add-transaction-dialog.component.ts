@@ -26,7 +26,7 @@ export class AddTransactionDialogComponent {
       name: ['', Validators.required],
       amount: ['', Validators.required],
       account: [data.user.defaultAccount, Validators.required],
-      category: ['', Validators.required],
+      category: [''],
     });
   }
 

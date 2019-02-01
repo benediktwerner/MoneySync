@@ -1,0 +1,14 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: 300px auto;
+  grid-template-rows: auto;
+  grid-gap: 20px;
+
+  @media (min-width: 1500px) {
+    grid-template-columns: 300px 770px 350px;
+  }
+}
+
+.active {
+  color: #3f51b5;
+}

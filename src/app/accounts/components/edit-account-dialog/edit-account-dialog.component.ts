@@ -14,7 +14,7 @@ export class EditAccountDialogComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private account: Account,
-    private dialogRef: MatDialogRef<AddAccountDialogComponent>,
+    private dialogRef: MatDialogRef<EditAccountDialogComponent>,
     private data: DataService,
     formBuilder: FormBuilder
   ) {
