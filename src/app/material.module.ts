@@ -9,6 +9,7 @@ import {
   MatDialogModule,
   MatInputModule,
   MatSelectModule,
+  MAT_DIALOG_DEFAULT_OPTIONS,
 } from '@angular/material';
 import { NgModule } from '@angular/core';
 
@@ -28,5 +29,11 @@ const modules = [
 @NgModule({
   imports: modules,
   exports: modules,
+  providers: [
+    {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS,
+      useValue: { autoFocus: false, hasBackdrop: true },
+    },
+  ],
 })
 export class MaterialModule {}

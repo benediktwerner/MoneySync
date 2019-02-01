@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material';
-import { Transaction } from '../data.service';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Transaction, DataService } from '../data.service';
+import { DeletionDialogComponent } from '../deletion-dialog/deletion-dialog.component';
 
 @Component({
   selector: 'app-transaction-dialog',
@@ -8,5 +9,26 @@ import { Transaction } from '../data.service';
   styleUrls: ['./transaction-dialog.component.scss'],
 })
 export class TransactionDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public transaction: Transaction) {}
+  isEditing: boolean;
+
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public transaction: Transaction,
+    private dialogRef: MatDialogRef<TransactionDialogComponent>,
+    private data: DataService,
+    private dialog: MatDialog
+  ) {}
+
+  onEdit() {}
+
+  onDelete() {
+    this.dialog
+      .open(DeletionDialogComponent)
+      .afterClosed()
+      .subscribe(result => {
+        if (result) {
+          this.dialogRef.close();
+          this.data.removeTransaction(this.transaction);
+        }
+      });
+  }
 }

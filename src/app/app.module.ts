@@ -17,6 +17,7 @@ import { StatisticsComponent } from './statistics/statistics.component';
 import { BalanceComponent } from './balance/balance.component';
 import { AddTransactionDialogComponent } from './add-transaction-dialog/add-transaction-dialog.component';
 import { TransactionDialogComponent } from './transaction-dialog/transaction-dialog.component';
+import { DeletionDialogComponent } from './deletion-dialog/deletion-dialog.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { TransactionDialogComponent } from './transaction-dialog/transaction-dia
     BalanceComponent,
     AddTransactionDialogComponent,
     TransactionDialogComponent,
+    DeletionDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,7 +42,7 @@ import { TransactionDialogComponent } from './transaction-dialog/transaction-dia
     AngularFirestoreModule.enablePersistence(),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
-  entryComponents: [AddTransactionDialogComponent, TransactionDialogComponent],
+  entryComponents: [AddTransactionDialogComponent, TransactionDialogComponent, DeletionDialogComponent],
   providers: [],
   bootstrap: [AppComponent],
 })

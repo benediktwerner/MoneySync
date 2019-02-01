@@ -129,4 +129,8 @@ export class DataService {
     transaction.id = this.db.createId();
     this.transactionsCollection.doc<TransactionPlain>(transaction.id).set(transaction);
   }
+
+  removeTransaction(transaction: Transaction) {
+    this.transactionsCollection.doc<TransactionPlain>(transaction.id).delete();
+  }
 }
