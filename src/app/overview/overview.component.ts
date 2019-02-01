@@ -56,6 +56,10 @@ export class OverviewComponent implements OnInit {
           y: total,
         });
       }
+      data.push({
+        t: new Date(),
+        y: total,
+      });
 
       this.chartData = data;
       if (this.chart) {
