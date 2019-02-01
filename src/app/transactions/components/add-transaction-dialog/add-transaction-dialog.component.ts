@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { DataService, Account, Category } from '../../../data.service';
-import { Observable } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -12,16 +11,16 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class AddTransactionDialogComponent {
   form: FormGroup;
 
-  accounts: Observable<Account[]>;
-  categories: Observable<Category[]>;
+  accounts: Account[];
+  categories: Category[];
 
   constructor(
     private dialogRef: MatDialogRef<AddTransactionDialogComponent>,
     private data: DataService,
     formBuilder: FormBuilder
   ) {
-    this.accounts = data.accounts;
-    this.categories = data.categories;
+    this.accounts = Object.values(data.accounts);
+    this.categories = Object.values(data.categories);
 
     this.form = formBuilder.group({
       name: ['', Validators.required],
@@ -40,7 +39,7 @@ export class AddTransactionDialogComponent {
       amount: this.form.controls.amount.value,
       accountId: this.form.controls.account.value,
       categoryId: this.form.controls.category.value,
-      timestamp: new Date(),
+      date: new Date(),
     });
     this.dialogRef.close();
   }

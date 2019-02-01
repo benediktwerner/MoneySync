@@ -17,7 +17,7 @@
 
     <mat-form-field>
       <mat-select placeholder="Category" [formControl]="form.controls.category">
-        <mat-option *ngFor="let cat of (categories | async)" [value]="cat.id">
+        <mat-option *ngFor="let cat of categories" [value]="cat.id">
           {{ cat.name }}
         </mat-option>
       </mat-select>
@@ -27,7 +27,7 @@
 
     <mat-form-field>
       <mat-select placeholder="Account" [formControl]="form.controls.account">
-        <mat-option *ngFor="let acc of (accounts | async)" [value]="acc.id">
+        <mat-option *ngFor="let acc of accounts" [value]="acc.id">
           {{ acc.name }}
         </mat-option>
       </mat-select>

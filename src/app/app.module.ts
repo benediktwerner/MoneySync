@@ -12,6 +12,7 @@ import { environment } from '../environments/environment';
 import { OverviewModule } from './overview/overview.module';
 import { StatisticsModule } from './statistics/statistics.module';
 import { TransactionsModule } from './transactions/transactions.module';
+import { AccountsModule } from './accounts/accounts.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +27,7 @@ import { TransactionsModule } from './transactions/transactions.module';
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     OverviewModule,
     StatisticsModule,
+    AccountsModule,
     TransactionsModule,
   ],
   providers: [],

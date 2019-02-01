@@ -1,7 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { Account, Category, TransactionPlain, DataService, Transaction } from 'src/app/data.service';
+import { Account, Category, DataService, Transaction } from 'src/app/data.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { AddTransactionDialogComponent } from '../add-transaction-dialog/add-transaction-dialog.component';
 
@@ -13,8 +12,8 @@ import { AddTransactionDialogComponent } from '../add-transaction-dialog/add-tra
 export class EditTransactionDialogComponent {
   form: FormGroup;
 
-  accounts: Observable<Account[]>;
-  categories: Observable<Category[]>;
+  accounts: Account[];
+  categories: Category[];
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -23,8 +22,8 @@ export class EditTransactionDialogComponent {
     private data: DataService,
     formBuilder: FormBuilder
   ) {
-    this.accounts = data.accounts;
-    this.categories = data.categories;
+    this.accounts = Object.values(data.accounts);
+    this.categories = Object.values(data.categories);
 
     this.form = formBuilder.group({
       name: [transaction.name, Validators.required],
@@ -43,7 +42,7 @@ export class EditTransactionDialogComponent {
       amount: this.form.controls.amount.value,
       accountId: this.form.controls.account.value,
       categoryId: this.form.controls.category.value,
-      timestamp: this.transaction.timestamp,
+      date: this.transaction.date,
     });
     this.dialogRef.close(true);
   }

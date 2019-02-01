@@ -4,15 +4,15 @@
       <div class="header-content">
         <div>
           <small>Total</small><br />
-          <app-currency [amount]="totalBalance | async"></app-currency>
+          <app-currency [amount]="data.totalBalance"></app-currency>
         </div>
         <div style="text-align: center">
           <small>Current Month</small><br />
-          <app-currency [amount]="currentMonthTotal | async"></app-currency>
+          <app-currency [amount]="data.currentMonthTotal"></app-currency>
         </div>
         <div style="text-align: right">
           <small>Last Month</small><br />
-          <app-currency [amount]="lastMonthTotal | async"></app-currency>
+          <app-currency [amount]="data.lastMonthTotal"></app-currency>
         </div>
       </div>
     </mat-card-title>
@@ -22,15 +22,19 @@
     <mat-card-title>Accounts</mat-card-title>
     <mat-card-content>
       <mat-action-list>
-        <ng-container *ngFor="let acc of (accounts | async); last as isLast">
-          <button mat-list-item>
+        <ng-container *ngFor="let acc of (accounts | async)">
+          <button mat-list-item (click)="showAccount(acc)">
             <mat-icon matListIcon>{{ acc.icon }}</mat-icon>
             <div class="two-col-list-item">
               <span>{{ acc.name }}</span> <app-currency [amount]="acc.balance"></app-currency>
             </div>
           </button>
-          <mat-divider *ngIf="!isLast"></mat-divider>
+          <mat-divider></mat-divider>
         </ng-container>
+        <button mat-list-item (click)="addAccount()">
+          <mat-icon matListIcon>add</mat-icon>
+          <div class="two-col-list-item">Add account</div>
+        </button>
       </mat-action-list>
     </mat-card-content>
   </mat-card>
@@ -49,11 +53,11 @@
 
           <ng-container *ngFor="let transaction of item.value; last as isLast">
             <button mat-list-item (click)="showTransaction(transaction)">
-              <mat-icon matListIcon>{{ (transaction.category | async)?.icon }}</mat-icon>
+              <mat-icon matListIcon>{{ data.categories[transaction.categoryId]?.icon }}</mat-icon>
               <div class="two-col-list-item">
                 <div class="transaction-text">
                   <div class="transaction-name">{{ transaction.name }}</div>
-                  <small class="transaction-category">{{ (transaction.category | async)?.name }}</small>
+                  <small class="transaction-category">{{ data.categories[transaction.categoryId]?.name }}</small>
                 </div>
                 <app-currency [amount]="transaction.amount"></app-currency>
               </div>

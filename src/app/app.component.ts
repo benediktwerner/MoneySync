@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { MatSnackBar, MatDialog } from '@angular/material';
-import { DataService } from './data.service';
 import { AddTransactionDialogComponent } from './transactions/components/add-transaction-dialog/add-transaction-dialog.component';
 
 export interface Item {
@@ -15,7 +14,7 @@ export interface Item {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  constructor(private dialog: MatDialog, private snackBar: MatSnackBar, private data: DataService, updates: SwUpdate) {
+  constructor(private dialog: MatDialog, private snackBar: MatSnackBar, updates: SwUpdate) {
     updates.available.subscribe(() => {
       this.showMessage('A new version is available', 'UPDATE', () =>
         updates.activateUpdate().then(() => document.location.reload())

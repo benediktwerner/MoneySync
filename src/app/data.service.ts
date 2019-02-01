@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { tap, map, shareReplay } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 declare global {
   interface Date {
@@ -12,6 +11,10 @@ declare global {
 Date.prototype.hasSameMonthAs = function(other: Date) {
   return this.getUTCFullYear() == other.getUTCFullYear() && this.getUTCMonth() == other.getUTCMonth();
 };
+
+export interface Dict<T> {
+  [key: string]: T;
+}
 
 export interface User {}
 
@@ -28,108 +31,128 @@ export interface Category {
   icon: string;
 }
 
-export interface TransactionPlain {
+export interface Transaction {
   id: string;
   name: string;
   amount: number;
-  timestamp: any;
+  date: any;
   accountId: string;
   categoryId: string;
-}
-
-export interface Transaction extends TransactionPlain {
-  date: Date;
-  account: Observable<Account>;
-  category: Observable<Category>;
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class DataService {
-  accounts: Observable<Account[]>;
-  transactions: Observable<Transaction[]>;
-  categories: Observable<Category[]>;
+  accounts: Dict<Account> = {};
+  categories: Dict<Category> = {};
+  transactions: Dict<Transaction> = {};
 
-  totalBalance: Observable<number>;
-  currentMonthTotal: Observable<number>;
-  lastMonthTotal: Observable<number>;
+  onAccountsChange: BehaviorSubject<Account[]>;
+  onCategoriesChange: BehaviorSubject<Category[]>;
+  onTransactionsChange: BehaviorSubject<Transaction[]>;
+
+  totalBalance: number = 0;
+  currentMonthTotal: number = 0;
+  lastMonthTotal: number = 0;
 
   userCollection: AngularFirestoreDocument<User>;
   accountsCollection: AngularFirestoreCollection<Account>;
   categoriesCollection: AngularFirestoreCollection<Category>;
-  transactionsCollection: AngularFirestoreCollection<TransactionPlain>;
-
-  private currDate: Date;
-  private lastMonthDate: Date;
+  transactionsCollection: AngularFirestoreCollection<Transaction>;
 
   constructor(private db: AngularFirestore) {
     this.userCollection = db.doc<User>('users/bene');
     this.accountsCollection = this.userCollection.collection<Account>('accounts');
     this.categoriesCollection = this.userCollection.collection<Category>('categories');
-    this.transactionsCollection = this.userCollection.collection<TransactionPlain>('transactions');
+    this.transactionsCollection = this.userCollection.collection<Transaction>('transactions');
 
-    this.accounts = this.accountsCollection.valueChanges().pipe(shareReplay(1));
-    this.categories = this.categoriesCollection.valueChanges().pipe(shareReplay(1));
-    this.transactions = this.transactionsCollection.valueChanges().pipe(
-      map(arr =>
-        arr.map(trans => {
-          const date = trans.timestamp.toDate();
-          const account = this.accountsCollection
-            .doc<Account>(trans.accountId)
-            .valueChanges()
-            .pipe(shareReplay(1));
-          const category = this.categoriesCollection
-            .doc<Category>(trans.categoryId)
-            .valueChanges()
-            .pipe(shareReplay(1));
-          return { account, category, date, ...trans };
-        })
-      ),
-      shareReplay(1)
-    );
+    this.onAccountsChange = new BehaviorSubject(Object.values(this.accounts));
+    this.onCategoriesChange = new BehaviorSubject(Object.values(this.categories));
+    this.onTransactionsChange = new BehaviorSubject(Object.values(this.transactions));
 
-    this.totalBalance = this.accounts.pipe(
-      map(arr => arr.reduce((total, current) => total + current.balance, 0)),
-      shareReplay(1)
-    );
-
-    let updateDate = tap(() => {
-      this.currDate = new Date();
-      this.lastMonthDate = new Date();
-      this.lastMonthDate.setMonth(this.lastMonthDate.getMonth() - 1);
+    this.accountsCollection.valueChanges().subscribe(accs => {
+      const accounts = {};
+      accs.forEach(acc => (accounts[acc.id] = acc));
+      this.accounts = accounts;
+      this.onAccountsChange.next(Object.values(accounts));
     });
+    this.categoriesCollection.valueChanges().subscribe(cats => {
+      const categories = {};
+      cats.forEach(cat => (categories[cat.id] = cat));
+      this.categories = categories;
+      this.onCategoriesChange.next(Object.values(categories));
+    });
+    this.transactionsCollection.valueChanges().subscribe(trans => {
+      const transactions = {};
+      const currDate = new Date();
+      const lastMonthDate = new Date();
+      lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
 
-    this.currentMonthTotal = this.transactions.pipe(
-      updateDate,
-      map<Transaction[], number>(arr =>
-        arr.reduce((total, current) => (current.date.hasSameMonthAs(this.currDate) ? total + current.amount : total), 0)
-      ),
-      shareReplay(1)
-    );
+      let accountBalances = {};
+      let totalBalance = 0;
+      let lastMonthTotal = 0;
+      let currentMonthTotal = 0;
 
-    this.lastMonthTotal = this.transactions.pipe(
-      updateDate,
-      map<Transaction[], number>(arr =>
-        arr.reduce(
-          (total, current) => (current.date.hasSameMonthAs(this.lastMonthDate) ? total + current.amount : total),
-          0
-        )
-      ),
-      shareReplay(1)
-    );
+      trans.forEach(t => {
+        t.date = t.date.toDate();
+        transactions[t.id] = t;
+        totalBalance += t.amount;
+
+        if (t.accountId in accountBalances) accountBalances[t.accountId] += t.amount;
+        else accountBalances[t.accountId] = t.amount;
+
+        if (t.date.hasSameMonthAs(currDate)) currentMonthTotal += t.amount;
+        else if (t.date.hasSameMonthAs(lastMonthDate)) lastMonthTotal += t.amount;
+      });
+
+      this.transactions = transactions;
+      this.totalBalance = totalBalance;
+      this.lastMonthTotal = lastMonthTotal;
+      this.currentMonthTotal = currentMonthTotal;
+      Object.keys(this.accounts).forEach(accId => (this.accounts[accId].balance = accountBalances[accId]));
+
+      this.onTransactionsChange.next(Object.values(this.transactions));
+      this.onAccountsChange.next(Object.values(this.accounts));
+    });
   }
 
-  addTransaction(transaction: TransactionPlain) {
+  addTransaction(transaction: Transaction) {
     transaction.id = this.db.createId();
-    this.transactionsCollection.doc<TransactionPlain>(transaction.id).set(transaction);
+    this.transactionsCollection.doc<Transaction>(transaction.id).set(transaction);
   }
 
-  updateTransaction(transaction: TransactionPlain) {
-    this.transactionsCollection.doc<TransactionPlain>(transaction.id).update(transaction);
+  updateTransaction(transaction: Transaction) {
+    this.transactionsCollection.doc<Transaction>(transaction.id).update(transaction);
   }
 
-  removeTransaction(transaction: Transaction) {
-    this.transactionsCollection.doc<TransactionPlain>(transaction.id).delete();
+  removeTransaction(id: string) {
+    this.transactionsCollection.doc<Transaction>(id).delete();
+  }
+
+  addAccount(account: Account) {
+    account.id = this.db.createId();
+    this.accountsCollection.doc<Account>(account.id).set(account);
+  }
+
+  updateAccount(account: Account) {
+    this.accountsCollection.doc<Account>(account.id).update(account);
+  }
+
+  removeAccount(id: string, moveTransactions = false, targetAccountId?: string) {
+    const batch = this.db.firestore.batch();
+
+    if (moveTransactions) {
+      Object.values(this.transactions).forEach(trans => {
+        if (trans.accountId == id)
+          batch.update(this.transactionsCollection.doc(trans.id).ref, { accountId: targetAccountId });
+      });
+    } else {
+      Object.values(this.transactions).forEach(trans => {
+        if (trans.accountId == id) batch.delete(this.transactionsCollection.doc(trans.id).ref);
+      });
+    }
+    batch.delete(this.accountsCollection.doc<Account>(id).ref);
+    return batch.commit();
   }
 }

@@ -1,35 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { formatDate, KeyValue } from '@angular/common';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { DataService, Account, Transaction } from '../data.service';
 import { map } from 'rxjs/operators';
 import { MatDialog } from '@angular/material';
 import { TransactionDialogComponent } from '../transactions/components/transaction-dialog/transaction-dialog.component';
 import { Chart } from 'chart.js';
+import { AccountDialogComponent } from '../accounts/components/account-dialog/account-dialog.component';
+import { AddAccountDialogComponent } from '../accounts/components/add-account-dialog/add-account-dialog.component';
 
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.scss'],
 })
-export class OverviewComponent implements OnInit {
+export class OverviewComponent implements OnInit, OnDestroy {
   accounts: Observable<Account[]>;
   transactionsByDate: Observable<KeyValue<string, Transaction>[]>;
 
-  totalBalance: Observable<number>;
-  currentMonthTotal: Observable<number>;
-  lastMonthTotal: Observable<number>;
+  private chart: any;
+  private chartData: { t: number; y: number }[];
+  private subscription: Subscription;
 
-  private chart;
-  private chartData;
-
-  constructor(private dialog: MatDialog, data: DataService) {
-    this.accounts = data.accounts;
-    this.transactionsByDate = data.transactions.pipe(
-      map(arr => {
+  constructor(private dialog: MatDialog, public data: DataService) {
+    this.accounts = this.data.onAccountsChange;
+    this.transactionsByDate = this.data.onTransactionsChange.pipe(
+      map(trans => {
         let groups = {};
         let result = [];
-        const transactionsSorted = arr.sort((a, b) => b.date.getTime() - a.date.getTime());
+        const transactionsSorted = trans.sort((a, b) => b.date.getTime() - a.date.getTime());
 
         for (let trans of transactionsSorted.slice(0, 10)) {
           let key = daysAgo(trans.date);
@@ -45,7 +44,7 @@ export class OverviewComponent implements OnInit {
       })
     );
 
-    data.transactions.subscribe(transactions => {
+    this.subscription = this.data.onTransactionsChange.subscribe(transactions => {
       let data = [];
       let total = 0;
 
@@ -67,14 +66,14 @@ export class OverviewComponent implements OnInit {
         this.chart.update();
       }
     });
-
-    this.totalBalance = data.totalBalance;
-    this.currentMonthTotal = data.currentMonthTotal;
-    this.lastMonthTotal = data.lastMonthTotal;
   }
 
   ngOnInit() {
     this.createChart();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   createChart() {
@@ -111,9 +110,15 @@ export class OverviewComponent implements OnInit {
   }
 
   showTransaction(transaction: Transaction) {
-    this.dialog.open(TransactionDialogComponent, {
-      data: transaction,
-    });
+    this.dialog.open(TransactionDialogComponent, { data: transaction });
+  }
+
+  showAccount(account: Account) {
+    this.dialog.open(AccountDialogComponent, { data: account });
+  }
+
+  addAccount() {
+    this.dialog.open(AddAccountDialogComponent);
   }
 }
 

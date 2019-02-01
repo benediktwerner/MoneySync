@@ -7,13 +7,13 @@
     <mat-list-item>{{ transaction.date | date: "dd. MMM yyyy 'at' HH:mm" }}</mat-list-item>
     <mat-divider></mat-divider>
     <mat-list-item>
-      <mat-icon mat-list-icon>{{ (transaction.category | async)?.icon }}</mat-icon>
-      {{ (transaction.category | async)?.name }}
+      <mat-icon mat-list-icon>{{ category?.icon }}</mat-icon>
+      {{ category?.name }}
     </mat-list-item>
     <mat-divider></mat-divider>
     <mat-list-item>
-      <mat-icon mat-list-icon>{{ (transaction.account | async)?.icon }}</mat-icon>
-      {{ (transaction.account | async)?.name }}
+      <mat-icon mat-list-icon>{{ account?.icon }}</mat-icon>
+      {{ account?.name }}
     </mat-list-item>
   </mat-list>
 </mat-dialog-content>
