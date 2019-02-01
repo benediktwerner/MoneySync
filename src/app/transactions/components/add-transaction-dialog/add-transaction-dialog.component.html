@@ -15,6 +15,13 @@
     </mat-form-field>
     <br />
 
+    <mat-form-field class="full-width">
+      <input matInput [matDatepicker]="picker" placeholder="Date" formControlName="date" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <br />
+
     <mat-form-field>
       <mat-select placeholder="Category" [formControl]="form.controls.category">
         <mat-option value="">No category</mat-option>

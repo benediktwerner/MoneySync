@@ -25,6 +25,7 @@ export class AddTransactionDialogComponent {
     this.form = formBuilder.group({
       name: ['', Validators.required],
       amount: ['', Validators.required],
+      date: [new Date(), Validators.required],
       account: [data.user.defaultAccount, Validators.required],
       category: [''],
     });
@@ -36,10 +37,10 @@ export class AddTransactionDialogComponent {
     this.data.addTransaction({
       id: null,
       name: this.form.controls.name.value,
+      date: this.form.controls.date.value,
       amount: this.form.controls.amount.value,
       accountId: this.form.controls.account.value,
       categoryId: this.form.controls.category.value,
-      date: new Date(),
     });
     this.dialogRef.close();
   }

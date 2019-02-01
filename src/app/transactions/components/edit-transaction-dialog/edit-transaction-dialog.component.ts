@@ -27,6 +27,7 @@ export class EditTransactionDialogComponent {
 
     this.form = formBuilder.group({
       name: [transaction.name, Validators.required],
+      date: [transaction.date, Validators.required],
       amount: [transaction.amount, Validators.required],
       account: [transaction.accountId, Validators.required],
       category: [transaction.categoryId],
@@ -39,10 +40,10 @@ export class EditTransactionDialogComponent {
     this.data.updateTransaction({
       id: this.transaction.id,
       name: this.form.controls.name.value,
+      date: this.form.controls.date.value,
       amount: this.form.controls.amount.value,
       accountId: this.form.controls.account.value,
       categoryId: this.form.controls.category.value,
-      date: this.transaction.date,
     });
     this.dialogRef.close(true);
   }

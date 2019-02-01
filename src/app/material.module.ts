@@ -11,6 +11,9 @@ import {
   MatSelectModule,
   MatAutocompleteModule,
   MAT_DIALOG_DEFAULT_OPTIONS,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MAT_DATE_LOCALE,
 } from '@angular/material';
 import { NgModule } from '@angular/core';
 
@@ -26,6 +29,8 @@ import { NgModule } from '@angular/core';
     MatDialogModule,
     MatInputModule,
     MatSelectModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
     MatAutocompleteModule,
   ],
   providers: [
@@ -33,6 +38,7 @@ import { NgModule } from '@angular/core';
       provide: MAT_DIALOG_DEFAULT_OPTIONS,
       useValue: { autoFocus: false, hasBackdrop: true },
     },
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
   ],
 })
 export class MaterialModule {}
