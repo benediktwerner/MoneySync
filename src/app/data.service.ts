@@ -35,13 +35,17 @@ export interface Category {
   icon: string;
 }
 
-export interface Transaction {
+interface TransactionInternal {
   id: string;
   name: string;
   amount: number;
   date: any;
   accountId: string;
   categoryId: string;
+}
+
+export interface Transaction extends TransactionInternal {
+  date: Date;
 }
 
 @Injectable({
@@ -62,16 +66,16 @@ export class DataService {
   currentMonthTotal: number = 0;
   lastMonthTotal: number = 0;
 
-  userDoc: AngularFirestoreDocument<User>;
-  accountsCollection: AngularFirestoreCollection<Account>;
-  categoriesCollection: AngularFirestoreCollection<Category>;
-  transactionsCollection: AngularFirestoreCollection<Transaction>;
+  private userDoc: AngularFirestoreDocument<User>;
+  private accountsCollection: AngularFirestoreCollection<Account>;
+  private categoriesCollection: AngularFirestoreCollection<Category>;
+  private transactionsCollection: AngularFirestoreCollection<TransactionInternal>;
 
   constructor(private db: AngularFirestore) {
     this.userDoc = db.doc<User>('users/bene');
     this.accountsCollection = this.userDoc.collection<Account>('accounts');
     this.categoriesCollection = this.userDoc.collection<Category>('categories');
-    this.transactionsCollection = this.userDoc.collection<Transaction>('transactions');
+    this.transactionsCollection = this.userDoc.collection<TransactionInternal>('transactions');
 
     this.onUserChange = new BehaviorSubject(this.user);
     this.onAccountsChange = new BehaviorSubject(Object.values(this.accounts));
