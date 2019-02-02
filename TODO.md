@@ -12,6 +12,8 @@
     - per month/year/total
   - history of category distribution
 
+- Account colors
+- Initial account balance
 - Calculator when adding transactions
 - Template transactions
 - Repeating transactions
@@ -19,4 +21,3 @@
 - account transfer
 - Import transactions from file
 - Better icon selector
-
