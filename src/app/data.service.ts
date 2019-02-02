@@ -83,9 +83,7 @@ export class DataService {
     this.onTransactionsChange = new BehaviorSubject(Object.values(this.transactions));
 
     this.userDoc.valueChanges().subscribe(user => {
-      if (user.chartsFill === undefined) user.chartsFill = false;
-      if (user.chartsStartAtZero === undefined) user.chartsStartAtZero = true;
-      this.user = user;
+      Object.assign(this.user, user);
       this.onUserChange.next(user);
     });
     this.accountsCollection.valueChanges().subscribe(accs => {
