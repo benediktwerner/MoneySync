@@ -18,6 +18,8 @@ export interface Dict<T> {
 
 export interface User {
   defaultAccount: string;
+  chartsStartAtZero: boolean;
+  chartsFill: 'start' | 'end' | 'origin' | boolean;
 }
 
 export interface Account {
@@ -46,7 +48,7 @@ export interface Transaction {
   providedIn: 'root',
 })
 export class DataService {
-  user: User = { defaultAccount: '' };
+  user: User = { defaultAccount: '', chartsStartAtZero: true, chartsFill: false };
   accounts: Dict<Account> = {};
   categories: Dict<Category> = {};
   transactions: Dict<Transaction> = {};
@@ -77,6 +79,8 @@ export class DataService {
     this.onTransactionsChange = new BehaviorSubject(Object.values(this.transactions));
 
     this.userDoc.valueChanges().subscribe(user => {
+      if (user.chartsFill === undefined) user.chartsFill = false;
+      if (user.chartsStartAtZero === undefined) user.chartsStartAtZero = true;
       this.user = user;
       this.onUserChange.next(user);
     });

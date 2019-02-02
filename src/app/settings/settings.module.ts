@@ -13,6 +13,8 @@ import { AddCategoryDialogComponent } from './add-category-dialog/add-category-d
 import { CategoryDialogComponent } from './category-dialog/category-dialog.component';
 import { EditCategoryDialogComponent } from './edit-category-dialog/edit-category-dialog.component';
 import { DeletionDialogModule } from '../ui/deletion-dialog/deletion-dialog.module';
+import { ChartSettingsComponent } from './chart-settings/chart-settings.component';
+import { StatisticsModule } from '../statistics/statistics.module';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import { DeletionDialogModule } from '../ui/deletion-dialog/deletion-dialog.modu
     AddCategoryDialogComponent,
     CategoryDialogComponent,
     EditCategoryDialogComponent,
+    ChartSettingsComponent,
   ],
   imports: [
     CommonModule,
@@ -33,8 +36,9 @@ import { DeletionDialogModule } from '../ui/deletion-dialog/deletion-dialog.modu
     CurrencyModule,
     IconSelectorModule,
     DeletionDialogModule,
+    StatisticsModule,
   ],
-  exports: [SettingsComponent, AccountsSettingsComponent, CategoriesSettingsComponent],
+  exports: [SettingsComponent, AccountsSettingsComponent, CategoriesSettingsComponent, ChartSettingsComponent],
   entryComponents: [
     DefaultAccountDialogComponent,
     AddCategoryDialogComponent,

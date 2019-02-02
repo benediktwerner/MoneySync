@@ -6,6 +6,7 @@ import { StatisticsComponent } from './statistics/statistics.component';
 import { SettingsComponent } from './settings/settings.component';
 import { AccountsSettingsComponent } from './settings/accounts-settings/accounts-settings.component';
 import { CategoriesSettingsComponent } from './settings/categories-settings/categories-settings.component';
+import { ChartSettingsComponent } from './settings/chart-settings/chart-settings.component';
 
 const routes: Routes = [
   { path: 'overview', component: OverviewComponent, pathMatch: 'full' },
@@ -16,6 +17,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'accounts', pathMatch: 'full' },
       { path: 'accounts', component: AccountsSettingsComponent },
       { path: 'categories', component: CategoriesSettingsComponent },
+      { path: 'charts', component: ChartSettingsComponent },
     ],
   },
   { path: 'transactions', component: TransactionsComponent },

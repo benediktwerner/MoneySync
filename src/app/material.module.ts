@@ -14,6 +14,7 @@ import {
   MatDatepickerModule,
   MatNativeDateModule,
   MAT_DATE_LOCALE,
+  MatSlideToggleModule,
 } from '@angular/material';
 import { NgModule } from '@angular/core';
 
@@ -32,6 +33,7 @@ import { NgModule } from '@angular/core';
     MatNativeDateModule,
     MatDatepickerModule,
     MatAutocompleteModule,
+    MatSlideToggleModule,
   ],
   providers: [
     {

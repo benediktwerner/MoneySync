@@ -14,7 +14,7 @@ export class TotalChartComponent implements OnDestroy, AfterViewInit {
   private chartData: { t: number; y: number }[];
   private subscription: Subscription;
 
-  constructor(data: DataService) {
+  constructor(private data: DataService) {
     this.subscription = data.onTransactionsChange.subscribe(transactions => {
       let data = [];
       let total = 0;
@@ -37,6 +37,16 @@ export class TotalChartComponent implements OnDestroy, AfterViewInit {
         this.chart.update();
       }
     });
+
+    this.subscription.add(
+      data.onUserChange.subscribe(user => {
+        if (this.chart) {
+          this.chart.data.datasets[0].fill = user.chartsFill;
+          this.chart.config.options.scales.yAxes[0].ticks.beginAtZero = user.chartsStartAtZero;
+          this.chart.update();
+        }
+      })
+    );
   }
 
   ngAfterViewInit() {
@@ -46,7 +56,7 @@ export class TotalChartComponent implements OnDestroy, AfterViewInit {
         datasets: [
           {
             label: 'Total',
-            fill: false,
+            fill: this.data.user.chartsFill,
             steppedLine: true,
             backgroundColor: 'rgb(54, 162, 235)',
             borderColor: 'rgb(54, 162, 235)',
@@ -55,7 +65,6 @@ export class TotalChartComponent implements OnDestroy, AfterViewInit {
         ],
       },
       options: {
-        responsive: true,
         tooltips: {
           mode: 'index',
           intersect: false,
@@ -64,7 +73,7 @@ export class TotalChartComponent implements OnDestroy, AfterViewInit {
           yAxes: [
             {
               ticks: {
-                beginAtZero: true,
+                beginAtZero: this.data.user.chartsStartAtZero,
               },
             },
           ],

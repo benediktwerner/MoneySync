@@ -1,0 +1,20 @@
+<mat-card>
+  <mat-card-title class="d-flex">Chart Settings</mat-card-title>
+  <mat-card-content>
+    <app-total-chart class="example-chart"></app-total-chart>
+
+    <mat-slide-toggle class="my-3" color="primary" [checked]="data.user.chartsStartAtZero" (change)="startAtZeroChanged($event)">
+      Start at Zero
+    </mat-slide-toggle>
+    <br />
+
+    <mat-form-field>
+      <mat-select placeholder="Fill" [value]="data.user.chartsFill" (selectionChange)="fillChanged($event)">
+        <mat-option value="false">No Fill</mat-option>
+        <mat-option value="start">Start</mat-option>
+        <mat-option value="origin">Origin</mat-option>
+        <mat-option value="end">End</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-card-content>
+</mat-card>
