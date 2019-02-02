@@ -172,10 +172,6 @@ export class DataService {
     return batch.commit();
   }
 
-  setDefaultAccount(id: string) {
-    this.userDoc.update({ defaultAccount: id });
-  }
-
   addCategory(category: Category) {
     category.id = this.db.createId();
     this.categoriesCollection.doc<Category>(category.id).set(category);
@@ -187,5 +183,9 @@ export class DataService {
 
   removeCategory(id: string) {
     this.categoriesCollection.doc<Category>(id).delete();
+  }
+
+  updateUserSettings(user?: User) {
+    this.userDoc.update(user ? user : this.user);
   }
 }

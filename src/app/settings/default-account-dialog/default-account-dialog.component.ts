@@ -24,7 +24,8 @@ export class DefaultAccountDialogComponent {
   }
 
   onSubmit() {
-    this.data.setDefaultAccount(this.form.controls.defaultAccount.value);
+    this.data.user.defaultAccount = this.form.controls.defaultAccount.value;
+    this.data.updateUserSettings();
     this.dialogRef.close();
   }
 }
