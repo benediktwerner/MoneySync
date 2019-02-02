@@ -20,6 +20,7 @@ export interface User {
   defaultAccount: string;
   chartsStartAtZero: boolean;
   chartsFill: 'start' | 'end' | 'origin' | boolean;
+  chartsLineStyle: 'stepped' | 'round' | 'straight';
 }
 
 export interface Account {
@@ -52,7 +53,7 @@ export interface Transaction extends TransactionInternal {
   providedIn: 'root',
 })
 export class DataService {
-  user: User = { defaultAccount: '', chartsStartAtZero: true, chartsFill: false };
+  user: User = { defaultAccount: '', chartsStartAtZero: true, chartsFill: false, chartsLineStyle: 'round' };
   accounts: Dict<Account> = {};
   categories: Dict<Category> = {};
   transactions: Dict<Transaction> = {};

@@ -16,8 +16,12 @@ export class ChartSettingsComponent {
   }
 
   fillChanged(event: MatSelectChange) {
-    console.log(event);
     this.data.user.chartsFill = event.value;
+    this.data.updateUserSettings();
+  }
+
+  lineStyleChanged(event: MatSelectChange) {
+    this.data.user.chartsLineStyle = event.value;
     this.data.updateUserSettings();
   }
 }

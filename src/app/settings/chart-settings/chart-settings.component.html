@@ -3,7 +3,12 @@
   <mat-card-content>
     <app-total-chart class="example-chart"></app-total-chart>
 
-    <mat-slide-toggle class="my-3" color="primary" [checked]="data.user.chartsStartAtZero" (change)="startAtZeroChanged($event)">
+    <mat-slide-toggle
+      class="my-3"
+      color="primary"
+      [checked]="data.user.chartsStartAtZero"
+      (change)="startAtZeroChanged($event)"
+    >
       Start at Zero
     </mat-slide-toggle>
     <br />
@@ -14,6 +19,19 @@
         <mat-option value="start">Start</mat-option>
         <mat-option value="origin">Origin</mat-option>
         <mat-option value="end">End</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br />
+
+    <mat-form-field>
+      <mat-select
+        placeholder="Line Style"
+        [value]="data.user.chartsLineStyle"
+        (selectionChange)="lineStyleChanged($event)"
+      >
+        <mat-option value="stepped">Stepped</mat-option>
+        <mat-option value="round">Round</mat-option>
+        <mat-option value="straight">Straight</mat-option>
       </mat-select>
     </mat-form-field>
   </mat-card-content>

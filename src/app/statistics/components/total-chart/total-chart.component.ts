@@ -1,0 +1,159 @@
+import { Component, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Chart } from 'chart.js';
+import { DataService, Transaction, Dict } from 'src/app/data.service';
+import { Subscription } from 'rxjs';
+
+interface ChartDataPoint {
+  t: number;
+  y: number;
+}
+
+@Component({
+  selector: 'app-total-chart',
+  templateUrl: './total-chart.component.html',
+  styleUrls: ['./total-chart.component.scss'],
+})
+export class TotalChartComponent implements OnDestroy, AfterViewInit {
+  @ViewChild('chart') private chartRef: ElementRef<HTMLCanvasElement>;
+  private chart: Chart;
+  private chartData: Chart.ChartDataSets[] = [];
+  private subscription: Subscription;
+
+  constructor(private data: DataService) {
+    this.subscription = data.onTransactionsChange.subscribe(transactions => {
+      if (transactions.length == 0) return;
+
+      let days: Dict<Transaction[]> = {};
+      for (const trans of transactions.sort((a, b) => a.date.getTime() - b.date.getTime())) {
+        const date = trans.date.toLocaleDateString();
+        if (date in days) days[date].push(trans);
+        else days[date] = [trans];
+      }
+
+      let totalData = [];
+      let totalAmount = 0;
+      let accData = {};
+      let accTotal = {};
+
+      for (let id in data.accounts) {
+        accData[id] = [];
+        accTotal[id] = 0;
+      }
+
+      for (const day in days) {
+        for (const trans of days[day]) {
+          totalAmount = round(totalAmount + trans.amount);
+          accTotal[trans.accountId] = round(accTotal[trans.accountId] + trans.amount);
+        }
+
+        const date = days[day][0].date;
+        totalData.push({ t: date, y: totalAmount });
+        for (let accId in accData) {
+          accData[accId].push({ t: date, y: accTotal[accId] });
+        }
+      }
+
+      totalData.push({ t: new Date(), y: totalAmount });
+      this.chartData = [this.generateDataset('Total', totalData)];
+
+      for (let id in accData) {
+        accData[id].push({ t: new Date(), y: accTotal[id] });
+        this.chartData.push(this.generateDataset(this.data.accounts[id].name, accData[id]));
+      }
+
+      if (this.chart) {
+        this.chart.data.datasets = this.chartData;
+        this.chart.update();
+      }
+    });
+
+    this.subscription.add(
+      data.onUserChange.subscribe(user => {
+        for (let dataset of this.chartData) {
+          dataset.fill = user.chartsFill;
+          dataset.steppedLine = data.user.chartsLineStyle == 'stepped';
+          dataset.lineTension = this.data.user.chartsLineStyle == 'round' ? 0.4 : 0;
+        }
+        if (this.chart) {
+          this.chart.config.options.scales.yAxes[0].ticks.beginAtZero = user.chartsStartAtZero;
+          this.chart.update();
+        }
+      })
+    );
+  }
+
+  generateDataset(label: string, data: ChartDataPoint[]): Chart.ChartDataSets {
+    const color = randomColor();
+    return {
+      label,
+      data,
+      fill: this.data.user.chartsFill,
+      backgroundColor: color,
+      borderColor: color,
+      pointRadius: 0,
+      steppedLine: this.data.user.chartsLineStyle == 'stepped',
+      lineTension: this.data.user.chartsLineStyle == 'round' ? 0.4 : 0,
+    };
+  }
+
+  ngAfterViewInit() {
+    this.chart = new Chart(this.chartRef.nativeElement, {
+      type: 'line',
+      data: {
+        datasets: this.chartData,
+      },
+      options: {
+        tooltips: {
+          mode: 'index',
+          intersect: false,
+          callbacks: {
+            label: function(tooltipItem, data) {
+              let label = data.datasets[tooltipItem.datasetIndex].label + ': ' || '';
+              return label + tooltipItem.yLabel + '€';
+            },
+          },
+        },
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                callback: function(value, index, values) {
+                  return value + '€';
+                },
+                beginAtZero: this.data.user.chartsStartAtZero,
+              },
+            },
+          ],
+          xAxes: [
+            {
+              type: 'time',
+              time: {
+                round: 'day',
+                minUnit: 'day',
+              },
+            },
+          ],
+        },
+      },
+    });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+}
+
+function round(number: number) {
+  return +number.toFixed(2);
+}
+
+function randomInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function randomColor() {
+  const h = randomInt(0, 360);
+  const s = randomInt(42, 98);
+  const l = randomInt(40, 90);
+  return `hsl(${h},${s}%,${l}%)`;
+}
