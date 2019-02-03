@@ -100,7 +100,8 @@ export class TotalChartComponent implements OnDestroy, AfterViewInit {
       fill: this.data.user.chartsFill,
       backgroundColor: color,
       borderColor: color,
-      pointRadius: 0,
+      cubicInterpolationMode: 'monotone',
+      pointRadius: index == 0 ? 3 : 0,
       steppedLine: this.data.user.chartsLineStyle == 'stepped',
       lineTension: this.data.user.chartsLineStyle == 'round' ? 0.4 : 0,
     };
