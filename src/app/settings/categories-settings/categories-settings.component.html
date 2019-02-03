@@ -5,13 +5,13 @@
       <ng-container *ngFor="let cat of (categories | async)">
         <button mat-list-item (click)="showCategory(cat)">
           <mat-icon matListIcon>{{ cat.icon }}</mat-icon>
-          <div class="two-col-list-item">{{ cat.name }}</div>
+          <div>{{ cat.name }}</div>
         </button>
         <mat-divider></mat-divider>
       </ng-container>
       <button mat-list-item (click)="addCategory()">
         <mat-icon matListIcon>add</mat-icon>
-        <div class="two-col-list-item">Add category</div>
+        <div>Add category</div>
       </button>
     </mat-action-list>
   </mat-card-content>
