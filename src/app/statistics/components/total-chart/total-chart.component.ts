@@ -54,11 +54,12 @@ export class TotalChartComponent implements OnDestroy, AfterViewInit {
       }
 
       totalData.push({ t: new Date(), y: totalAmount });
-      this.chartData = [this.generateDataset('Total', totalData)];
+      this.chartData = [this.generateDataset('Total', totalData, 0)];
 
+      let index = 1;
       for (let id in accData) {
         accData[id].push({ t: new Date(), y: accTotal[id] });
-        this.chartData.push(this.generateDataset(this.data.accounts[id].name, accData[id]));
+        this.chartData.push(this.generateDataset(this.data.accounts[id].name, accData[id], index++));
       }
 
       if (this.chart) {
@@ -82,8 +83,10 @@ export class TotalChartComponent implements OnDestroy, AfterViewInit {
     );
   }
 
-  generateDataset(label: string, data: ChartDataPoint[]): Chart.ChartDataSets {
-    const color = randomColor();
+  generateDataset(label: string, data: ChartDataPoint[], index: number): Chart.ChartDataSets {
+    const length = Object.keys(this.data.accounts).length + 1;
+    const hue = (360 * index) / length;
+    const color = `hsl(${hue}, 60%, 60%)`;
     return {
       label,
       data,
@@ -145,15 +148,4 @@ export class TotalChartComponent implements OnDestroy, AfterViewInit {
 
 function round(number: number) {
   return +number.toFixed(2);
-}
-
-function randomInt(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function randomColor() {
-  const h = randomInt(0, 360);
-  const s = randomInt(42, 98);
-  const l = randomInt(40, 90);
-  return `hsl(${h},${s}%,${l}%)`;
 }
