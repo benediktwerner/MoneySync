@@ -3,16 +3,16 @@
   grid-template-columns: 300px auto;
   grid-template-rows: 64px auto;
   grid-template-areas:
-    "header header"
-    "accounts statistics"
-    "accounts transactions";
+    'header header'
+    'accounts statistics'
+    'accounts transactions';
   grid-gap: 20px;
 
   @media (min-width: 1200px) {
     grid-template-columns: 300px auto 300px;
     grid-template-areas:
-      "header header transactions"
-      "accounts statistics transactions";
+      'header header transactions'
+      'accounts statistics transactions';
   }
 
   @media (min-width: 1500px) {
@@ -31,28 +31,6 @@
 
 .transactions {
   grid-area: transactions;
-}
-
-.transaction-date {
-  &:not(:first-child) {
-    margin-top: 15px;
-  }
-
-  margin-bottom: -10px !important;
-  opacity: 0.8;
-}
-
-.transaction-text {
-  padding-left: 10px;
-  text-align: left;
-
-  .transaction-name {
-    font-size: 18px;
-  }
-
-  .transaction-category {
-    opacity: 0.7;
-  }
 }
 
 .header {

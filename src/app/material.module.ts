@@ -15,6 +15,7 @@ import {
   MatNativeDateModule,
   MAT_DATE_LOCALE,
   MatSlideToggleModule,
+  MatCheckboxModule,
 } from '@angular/material';
 import { NgModule } from '@angular/core';
 
@@ -30,6 +31,7 @@ import { NgModule } from '@angular/core';
     MatDialogModule,
     MatInputModule,
     MatSelectModule,
+    MatCheckboxModule,
     MatNativeDateModule,
     MatDatepickerModule,
     MatAutocompleteModule,

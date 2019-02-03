@@ -1,0 +1,24 @@
+<mat-card class="transactions">
+  <mat-card-title>Transactions</mat-card-title>
+  <mat-card-content>
+    <mat-action-list>
+      <ng-container *ngFor="let item of transactionsByDate">
+        <h3 mat-subheader class="transaction-date">{{ item.key }}</h3>
+
+        <ng-container *ngFor="let transaction of item.value; last as isLast">
+          <button mat-list-item (click)="showTransaction(transaction)">
+            <mat-icon matListIcon>{{ data.categories[transaction.categoryId]?.icon }}</mat-icon>
+            <div class="two-col-list-item">
+              <div class="transaction-text">
+                <div class="transaction-name">{{ transaction.name }}</div>
+                <small class="transaction-category">{{ data.categories[transaction.categoryId]?.name }}</small>
+              </div>
+              <app-currency [amount]="transaction.amount"></app-currency>
+            </div>
+          </button>
+          <mat-divider *ngIf="!isLast"></mat-divider>
+        </ng-container>
+      </ng-container>
+    </mat-action-list>
+  </mat-card-content>
+</mat-card>

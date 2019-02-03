@@ -1,3 +1,84 @@
-<p>
-  transactions works!
-</p>
+<div class="grid-container">
+  <mat-card class="sidenav">
+    <mat-card-title>Filter</mat-card-title>
+
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item>
+          <mat-checkbox color="primary" [(ngModel)]="showEarnings">Earnings</mat-checkbox>
+          <mat-checkbox color="primary" [(ngModel)]="showSpendings" class="ml-5">Spendings</mat-checkbox>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+
+        <mat-list-item>
+          <mat-select class="ml-1" [(value)]="accountFilter"
+            ><mat-select-trigger>
+              <div class="select-icon-trigger">
+                <mat-icon>{{ accountFilter == '' ? 'account_circle' : data.accounts[accountFilter]?.icon }}</mat-icon
+                >{{ accountFilter == '' ? 'All accounts' : data.accounts[accountFilter]?.name }}
+              </div>
+            </mat-select-trigger>
+
+            <mat-option value=""><mat-icon>account_circle</mat-icon>All accounts</mat-option>
+            <mat-option *ngFor="let acc of (accounts | async)" [value]="acc.id">
+              <mat-icon>{{ acc.icon }}</mat-icon>
+              {{ acc.name }}
+            </mat-option>
+          </mat-select>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-select class="ml-1" [(value)]="categoryFilter">
+            <mat-select-trigger>
+              <div class="select-icon-trigger">
+                <mat-icon>{{ categoryFilter == '' ? 'category' : data.categories[categoryFilter]?.icon }}</mat-icon
+                >{{ categoryFilter == '' ? 'All categories' : data.categories[categoryFilter]?.name }}
+              </div>
+            </mat-select-trigger>
+
+            <mat-option value=""><mat-icon>category</mat-icon>All categories</mat-option>
+            <mat-option *ngFor="let cat of (categories | async)" [value]="cat.id">
+              <mat-icon>{{ cat.icon }}</mat-icon>
+              {{ cat.name }}
+            </mat-option>
+          </mat-select>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+
+        <mat-list-item class="mt-3">
+          <mat-form-field class="mr-2">
+            <input
+              matInput
+              [(ngModel)]="minAmount"
+              type="number"
+              step="1"
+              placeholder="Min. amount"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              matInput
+              [(ngModel)]="maxAmount"
+              type="number"
+              step="1"
+              placeholder="Max. amount"
+              autocomplete="off"
+            />
+          </mat-form-field>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+
+  <app-transactions-list
+    [showEarnings]="showEarnings"
+    [showSpendings]="showSpendings"
+    [accountFilter]="accountFilter"
+    [categoryFilter]="categoryFilter"
+    [minAmount]="minAmount"
+    [maxAmount]="maxAmount"
+  ></app-transactions-list>
+</div>

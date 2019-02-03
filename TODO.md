@@ -1,8 +1,6 @@
 # TODO
 
 - Transactions page
-  - Filter by account
-  - Filter by category
   - Search
 
 - Statistics page
