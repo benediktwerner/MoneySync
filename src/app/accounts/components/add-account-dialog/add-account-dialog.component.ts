@@ -19,6 +19,7 @@ export class AddAccountDialogComponent {
     this.form = formBuilder.group({
       name: ['', Validators.required],
       icon: ['', Validators.required],
+      initialBalance: [0, Validators.required],
     });
   }
 
@@ -28,6 +29,7 @@ export class AddAccountDialogComponent {
     this.data.addAccount({
       id: null,
       balance: 0,
+      initialBalance: this.form.controls.initialBalance.value,
       name: this.form.controls.name.value,
       icon: this.form.controls.icon.value,
     });

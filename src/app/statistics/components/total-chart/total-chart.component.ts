@@ -20,53 +20,8 @@ export class TotalChartComponent implements OnDestroy, AfterViewInit {
   private subscription: Subscription;
 
   constructor(private data: DataService) {
-    this.subscription = data.onTransactionsChange.subscribe(transactions => {
-      if (transactions.length == 0) return;
-
-      let days: Dict<Transaction[]> = {};
-      for (const trans of transactions.sort((a, b) => a.date.getTime() - b.date.getTime())) {
-        const date = trans.date.toLocaleDateString();
-        if (date in days) days[date].push(trans);
-        else days[date] = [trans];
-      }
-
-      let totalData = [];
-      let totalAmount = 0;
-      let accData = {};
-      let accTotal = {};
-
-      for (let id in data.accounts) {
-        accData[id] = [];
-        accTotal[id] = 0;
-      }
-
-      for (const day in days) {
-        for (const trans of days[day]) {
-          totalAmount = round(totalAmount + trans.amount);
-          accTotal[trans.accountId] = round(accTotal[trans.accountId] + trans.amount);
-        }
-
-        const date = days[day][0].date;
-        totalData.push({ t: date, y: totalAmount });
-        for (let accId in accData) {
-          accData[accId].push({ t: date, y: accTotal[accId] });
-        }
-      }
-
-      totalData.push({ t: new Date(), y: totalAmount });
-      this.chartData = [this.generateDataset('Total', totalData, 0)];
-
-      let index = 1;
-      for (let id in accData) {
-        accData[id].push({ t: new Date(), y: accTotal[id] });
-        this.chartData.push(this.generateDataset(this.data.accounts[id].name, accData[id], index++));
-      }
-
-      if (this.chart) {
-        this.chart.data.datasets = this.chartData;
-        this.chart.update();
-      }
-    });
+    this.generateData = this.generateData.bind(this);
+    this.subscription = data.onAccountsChange.subscribe(this.generateData);
 
     this.subscription.add(
       data.onUserChange.subscribe(user => {
@@ -81,6 +36,58 @@ export class TotalChartComponent implements OnDestroy, AfterViewInit {
         }
       })
     );
+  }
+
+  generateData() {
+    const transactionsList = Object.values(this.data.transactions);
+    const accountsList = Object.values(this.data.accounts);
+
+    if (transactionsList.length == 0 || accountsList.length == 0) return;
+
+    let days: Dict<Transaction[]> = {};
+    for (const trans of transactionsList.sort((a, b) => a.date.getTime() - b.date.getTime())) {
+      const date = trans.date.toLocaleDateString();
+      if (date in days) days[date].push(trans);
+      else days[date] = [trans];
+    }
+
+    let totalData = [];
+    let totalAmount = 0;
+    let accData = {};
+    let accTotal = {};
+
+    for (const accId in this.data.accounts) {
+      accData[accId] = [];
+      accTotal[accId] = this.data.accounts[accId].initialBalance;
+      totalAmount += this.data.accounts[accId].initialBalance;
+    }
+
+    for (const day in days) {
+      for (const trans of days[day]) {
+        totalAmount = round(totalAmount + trans.amount);
+        accTotal[trans.accountId] = round(accTotal[trans.accountId] + trans.amount);
+      }
+
+      const date = days[day][0].date;
+      totalData.push({ t: date, y: totalAmount });
+      for (let accId in accData) {
+        accData[accId].push({ t: date, y: accTotal[accId] });
+      }
+    }
+
+    totalData.push({ t: new Date(), y: totalAmount });
+    this.chartData = [this.generateDataset('Total', totalData, 0)];
+
+    let index = 1;
+    for (let accId in accData) {
+      accData[accId].push({ t: new Date(), y: accTotal[accId] });
+      this.chartData.push(this.generateDataset(this.data.accounts[accId].name, accData[accId], index++));
+    }
+
+    if (this.chart) {
+      this.chart.data.datasets = this.chartData;
+      this.chart.update();
+    }
   }
 
   generateDataset(label: string, data: ChartDataPoint[], index: number): Chart.ChartDataSets {

@@ -13,7 +13,6 @@
   - history of category distribution
 
 - Account colors
-- Initial account balance
 - Calculator when adding transactions
 - Template transactions
 - Repeating transactions

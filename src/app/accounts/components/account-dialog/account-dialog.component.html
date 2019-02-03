@@ -2,7 +2,9 @@
 
 <mat-dialog-content>
   <mat-list>
-    <mat-list-item> <app-currency [amount]="account.balance"></app-currency> </mat-list-item>
+    <mat-list-item> Total: &nbsp; <app-currency [amount]="account.balance"></app-currency> </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item> Initial: &nbsp; <app-currency [amount]="account.initialBalance"></app-currency> </mat-list-item>
     <mat-divider></mat-divider>
     <mat-list-item>
       <mat-icon mat-list-icon>{{ account.icon }}</mat-icon>

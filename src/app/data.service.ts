@@ -26,8 +26,9 @@ export interface User {
 export interface Account {
   id: string;
   name: string;
-  balance: number;
   icon: string;
+  balance: number;
+  initialBalance: number;
 }
 
 export interface Category {
@@ -91,6 +92,7 @@ export class DataService {
       const accounts = {};
       accs.forEach(acc => (accounts[acc.id] = acc));
       this.accounts = accounts;
+      this.generateBalances();
       this.onAccountsChange.next(Object.values(accounts));
     });
     this.categoriesCollection.valueChanges().subscribe(cats => {
@@ -101,36 +103,40 @@ export class DataService {
     });
     this.transactionsCollection.valueChanges().subscribe(trans => {
       const transactions = {};
-      const currDate = new Date();
-      const lastMonthDate = new Date();
-      lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
-
-      let accountBalances = {};
-      let totalBalance = 0;
-      let lastMonthTotal = 0;
-      let currentMonthTotal = 0;
-
       trans.forEach(t => {
         t.date = t.date.toDate();
         transactions[t.id] = t;
-        totalBalance += t.amount;
-
-        if (t.accountId in accountBalances) accountBalances[t.accountId] += t.amount;
-        else accountBalances[t.accountId] = t.amount;
-
-        if (t.date.hasSameMonthAs(currDate)) currentMonthTotal += t.amount;
-        else if (t.date.hasSameMonthAs(lastMonthDate)) lastMonthTotal += t.amount;
       });
-
       this.transactions = transactions;
-      this.totalBalance = totalBalance;
-      this.lastMonthTotal = lastMonthTotal;
-      this.currentMonthTotal = currentMonthTotal;
-      Object.keys(this.accounts).forEach(accId => (this.accounts[accId].balance = accountBalances[accId]));
-
+      this.generateBalances();
       this.onTransactionsChange.next(Object.values(this.transactions));
       this.onAccountsChange.next(Object.values(this.accounts));
     });
+  }
+
+  private generateBalances() {
+    if (Object.keys(this.accounts).length == 0) return;
+
+    const currDate = new Date();
+    const lastMonthDate = new Date();
+    lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
+
+    this.totalBalance = 0;
+    this.lastMonthTotal = 0;
+    this.currentMonthTotal = 0;
+
+    for (const acc of Object.values(this.accounts)) {
+      acc.balance = acc.initialBalance;
+      this.totalBalance += acc.initialBalance;
+    }
+
+    for (const trans of Object.values(this.transactions)) {
+      this.totalBalance += trans.amount;
+      this.accounts[trans.accountId].balance += trans.amount;
+
+      if (trans.date.hasSameMonthAs(currDate)) this.currentMonthTotal += trans.amount;
+      else if (trans.date.hasSameMonthAs(lastMonthDate)) this.lastMonthTotal += trans.amount;
+    }
   }
 
   addTransaction(transaction: Transaction) {

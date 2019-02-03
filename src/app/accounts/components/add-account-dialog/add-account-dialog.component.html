@@ -9,6 +9,13 @@
     <br />
 
     <mat-form-field class="full-width">
+      <span matPrefix>€&nbsp;</span>
+      <input matInput type="number" step="0.01" placeholder="Initial balance" formControlName="initialBalance" />
+      <mat-error *ngIf="form.controls.initialBalance.errors?.required">Initial Balance is required</mat-error>
+    </mat-form-field>
+    <br />
+
+    <mat-form-field class="full-width">
       <app-icon-selector formControlName="icon"></app-icon-selector>
       <mat-error *ngIf="form.controls.icon.errors?.required">Icon is required</mat-error>
     </mat-form-field>

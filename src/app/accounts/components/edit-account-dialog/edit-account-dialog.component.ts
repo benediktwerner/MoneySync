@@ -2,7 +2,6 @@ import { Component, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Account, DataService } from 'src/app/data.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { AddAccountDialogComponent } from '../add-account-dialog/add-account-dialog.component';
 
 @Component({
   selector: 'app-edit-account-dialog',
@@ -21,6 +20,7 @@ export class EditAccountDialogComponent {
     this.form = formBuilder.group({
       name: [account.name, Validators.required],
       icon: [account.icon, Validators.required],
+      initialBalance: [account.initialBalance, Validators.required],
     });
   }
 
@@ -30,6 +30,7 @@ export class EditAccountDialogComponent {
     this.data.updateAccount({
       id: this.account.id,
       balance: this.account.balance,
+      initialBalance: this.form.controls.initialBalance.value,
       name: this.form.controls.name.value,
       icon: this.form.controls.icon.value,
     });
