@@ -22,7 +22,7 @@
     </mat-form-field>
     <br />
 
-    <mat-form-field>
+    <mat-form-field class="full-width">
       <mat-select placeholder="Category" [formControl]="form.controls.category">
         <mat-option value="">No category</mat-option>
         <mat-option *ngFor="let cat of categories" [value]="cat.id">
@@ -32,7 +32,7 @@
     </mat-form-field>
     <br />
 
-    <mat-form-field>
+    <mat-form-field class="full-width">
       <mat-select placeholder="Account" [formControl]="form.controls.account">
         <mat-option *ngFor="let acc of accounts" [value]="acc.id">
           {{ acc.name }}
