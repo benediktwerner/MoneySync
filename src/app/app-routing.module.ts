@@ -7,9 +7,24 @@ import { SettingsComponent } from './settings/settings.component';
 import { AccountsSettingsComponent } from './settings/accounts-settings/accounts-settings.component';
 import { CategoriesSettingsComponent } from './settings/categories-settings/categories-settings.component';
 import { ChartSettingsComponent } from './settings/chart-settings/chart-settings.component';
+import { AccountsStatisticsComponent } from './statistics/accounts-statistics/accounts-statistics.component';
+import { CategoriesStatisticsComponent } from './statistics/categories-statistics/categories-statistics.component';
+import { EarningsSpendingsStatisticsComponent } from './statistics/earnings-spendings-statistics/earnings-spendings-statistics.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: '/overview', pathMatch: 'full' },
   { path: 'overview', component: OverviewComponent, pathMatch: 'full' },
+  { path: 'transactions', component: TransactionsComponent },
+  {
+    path: 'statistics',
+    component: StatisticsComponent,
+    children: [
+      { path: '', redirectTo: 'accounts', pathMatch: 'full' },
+      { path: 'accounts', component: AccountsStatisticsComponent },
+      { path: 'categories', component: CategoriesStatisticsComponent },
+      { path: 'earnings-spendings', component: EarningsSpendingsStatisticsComponent },
+    ],
+  },
   {
     path: 'settings',
     component: SettingsComponent,
@@ -20,9 +35,6 @@ const routes: Routes = [
       { path: 'charts', component: ChartSettingsComponent },
     ],
   },
-  { path: 'transactions', component: TransactionsComponent },
-  { path: 'statistics', component: StatisticsComponent },
-  { path: '', redirectTo: '/overview', pathMatch: 'full' },
 ];
 
 @NgModule({

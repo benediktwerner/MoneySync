@@ -1,11 +1,7 @@
 # TODO
 
 - Statistics page
-  - Account and category history
-  - pie charts
-    - seperate income/spendings
-    - per month/year/total
-  - history of category distribution
+  - Choose time range
 
 - Account colors
 - Calculator when adding transactions

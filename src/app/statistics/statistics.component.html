@@ -1,3 +1,26 @@
-<p>
-  statistics works!
-</p>
+<div class="nav-grid">
+  <mat-card class="sidenav">
+    <mat-card-title>Statistics</mat-card-title>
+
+    <mat-card-content>
+      <mat-action-list>
+        <button mat-list-item routerLink="accounts" routerLinkActive="active">
+          <mat-icon matListIcon>account_circle</mat-icon>
+          <div>Accounts</div>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-list-item routerLink="categories" routerLinkActive="active">
+          <mat-icon matListIcon>category</mat-icon>
+          <div>Categories</div>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-list-item routerLink="earnings-spendings" routerLinkActive="active">
+          <mat-icon matListIcon>pie_chart</mat-icon>
+          <div>Earnings/Spendings</div>
+        </button>
+      </mat-action-list>
+    </mat-card-content>
+  </mat-card>
+
+  <router-outlet></router-outlet>
+</div>

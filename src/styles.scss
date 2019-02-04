@@ -89,3 +89,28 @@ mat-select-trigger {
     vertical-align: middle;
   }
 }
+
+router-outlet {
+  display: none;
+}
+
+.nav-grid {
+  display: grid;
+  grid-template-columns: 300px auto;
+  grid-template-rows: auto;
+  grid-gap: 20px;
+  grid-template-areas: "nav wide wide";
+
+  @media (min-width: 1500px) {
+    grid-template-columns: 300px 770px 330px;
+  }
+
+  > * {
+    min-width: 0;
+  }
+}
+
+.mat-list-base .mat-list-item.active {
+  color: #3f51b5;
+  font-weight: 500;
+}

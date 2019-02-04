@@ -1,0 +1,32 @@
+<div class="container nav-grid-content-wide">
+  <mat-card>
+    <mat-card-title class="d-flex">Earnings</mat-card-title>
+    <mat-card-content>
+      <canvas #earningsChart></canvas>
+      <mat-list>
+        <mat-list-item *ngFor="let item of (earnings | keyvalue); last as isLast">
+          <mat-icon matListIcon>{{ data.categories[item.key].icon }}</mat-icon>
+          <div class="two-col-list-item">
+            <span>{{ data.categories[item.key].name }}</span> <app-currency [amount]="item.value"></app-currency>
+          </div>
+          <mat-divider *ngIf="!isLast"></mat-divider>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-title class="d-flex">Spendings</mat-card-title>
+    <mat-card-content>
+      <canvas #spendingsChart></canvas>
+      <mat-list>
+        <mat-list-item *ngFor="let item of (spendings | keyvalue); last as isLast">
+          <mat-icon matListIcon>{{ data.categories[item.key].icon }}</mat-icon>
+          <div class="two-col-list-item">
+            <span>{{ data.categories[item.key].name }}</span> <app-currency [amount]="item.value"></app-currency>
+          </div>
+          <mat-divider *ngIf="!isLast"></mat-divider>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+</div>

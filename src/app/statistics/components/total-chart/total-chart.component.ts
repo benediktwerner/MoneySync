@@ -1,12 +1,7 @@
 import { Component, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { Chart } from 'chart.js';
+import { Chart, ChartPoint, ChartDataSets } from 'chart.js';
 import { DataService, Transaction, Dict } from 'src/app/data.service';
 import { Subscription } from 'rxjs';
-
-interface ChartDataPoint {
-  t: number;
-  y: number;
-}
 
 @Component({
   selector: 'app-total-chart',
@@ -16,7 +11,7 @@ interface ChartDataPoint {
 export class TotalChartComponent implements OnDestroy, AfterViewInit {
   @ViewChild('chart') private chartRef: ElementRef<HTMLCanvasElement>;
   private chart: Chart;
-  private chartData: Chart.ChartDataSets[] = [];
+  private chartData: ChartDataSets[] = [];
   private subscription: Subscription;
 
   constructor(private data: DataService) {
@@ -90,7 +85,7 @@ export class TotalChartComponent implements OnDestroy, AfterViewInit {
     }
   }
 
-  generateDataset(label: string, data: ChartDataPoint[], index: number): Chart.ChartDataSets {
+  generateDataset(label: string, data: ChartPoint[], index: number): Chart.ChartDataSets {
     const length = Object.keys(this.data.accounts).length + 1;
     const hue = (360 * index) / length;
     const color = `hsl(${hue}, 60%, 60%)`;
@@ -119,7 +114,7 @@ export class TotalChartComponent implements OnDestroy, AfterViewInit {
           intersect: false,
           callbacks: {
             label: function(tooltipItem, data) {
-              let label = data.datasets[tooltipItem.datasetIndex].label + ': ' || '';
+              let label = data.datasets[tooltipItem.datasetIndex].label + ': ';
               return label + tooltipItem.yLabel + '€';
             },
           },
