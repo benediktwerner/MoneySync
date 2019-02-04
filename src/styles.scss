@@ -57,6 +57,10 @@ $spacers: 0 0.25 0.5 1 2 3;
   width: unset !important;
 }
 
+button.small {
+  line-height: 1;
+}
+
 .full-width {
   width: 100%;
 }
