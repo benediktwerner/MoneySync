@@ -16,6 +16,7 @@ export class TransactionsListComponent implements OnChanges, OnDestroy {
   @Input() private showSpendings: boolean = true;
   @Input() private accountFilter: string = '';
   @Input() private categoryFilter: string = '';
+  @Input() private nameFilter: string = '';
   @Input() private minAmount: number;
   @Input() private maxAmount: number;
 
@@ -34,8 +35,9 @@ export class TransactionsListComponent implements OnChanges, OnDestroy {
     for (let trans of transactionsSorted.slice(0, this.maxCount)) {
       if (!this.showEarnings && trans.amount > 0) continue;
       if (!this.showSpendings && trans.amount < 0) continue;
-      if (this.categoryFilter != '' && trans.categoryId != this.categoryFilter) continue;
-      if (this.accountFilter != '' && trans.accountId != this.accountFilter) continue;
+      if (this.categoryFilter && trans.categoryId != this.categoryFilter) continue;
+      if (this.accountFilter && trans.accountId != this.accountFilter) continue;
+      if (this.nameFilter && trans.name.toLowerCase().indexOf(this.nameFilter.toLowerCase()) == -1) continue;
       if (this.minAmount && Math.abs(trans.amount) < this.minAmount) continue;
       if (this.maxAmount && Math.abs(trans.amount) > this.maxAmount) continue;
 

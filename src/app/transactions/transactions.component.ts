@@ -17,6 +17,7 @@ export class TransactionsComponent {
 
   accountFilter: string = '';
   categoryFilter: string = '';
+  nameFilter: string = '';
 
   minAmount: number;
   maxAmount: number;

@@ -17,7 +17,7 @@ a {
   flex: 1 1 auto !important;
 }
 
-$spacers: 0 0.25 0.5 1 1.5 3;
+$spacers: 0 0.25 0.5 1 2 3;
 @for $i from 1 through length($spacers) {
   .ml-#{$i - 1} {
     margin-left: 1rem * nth($spacers, $i) !important;
@@ -51,6 +51,14 @@ $spacers: 0 0.25 0.5 1 1.5 3;
 
 .mat-list .mat-list-item .mat-list-icon {
   margin-left: -8px;
+}
+
+.small .mat-form-field-infix {
+  width: unset !important;
+}
+
+.full-width {
+  width: 100%;
 }
 
 .two-col-list-item {

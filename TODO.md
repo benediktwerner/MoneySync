@@ -1,8 +1,5 @@
 # TODO
 
-- Transactions page
-  - Search
-
 - Statistics page
   - Account and category history
   - pie charts

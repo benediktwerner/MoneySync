@@ -47,8 +47,8 @@
 
         <mat-divider></mat-divider>
 
-        <mat-list-item class="mt-3">
-          <mat-form-field class="mr-2">
+        <mat-list-item class="my-3">
+          <mat-form-field class="mr-2 small">
             <input
               matInput
               [(ngModel)]="minAmount"
@@ -58,7 +58,7 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field>
+          <mat-form-field class="small">
             <input
               matInput
               [(ngModel)]="maxAmount"
@@ -67,6 +67,26 @@
               placeholder="Max. amount"
               autocomplete="off"
             />
+          </mat-form-field>
+        </mat-list-item>
+
+        <mat-divider></mat-divider>
+
+        <mat-list-item class="mt-4">
+          <mat-form-field class="full-width">
+            <input
+              matInput
+              [(ngModel)]="nameFilter"
+              (keydown.esc)="nameFilter = ''"
+              placeholder="Search"
+              autocomplete="off"
+            />
+            <button mat-button *ngIf="!nameFilter" matSuffix mat-icon-button>
+              <mat-icon>search</mat-icon>
+            </button>
+            <button mat-button *ngIf="nameFilter" matSuffix mat-icon-button (click)="nameFilter = ''">
+              <mat-icon>close</mat-icon>
+            </button>
           </mat-form-field>
         </mat-list-item>
       </mat-list>
@@ -78,6 +98,7 @@
     [showSpendings]="showSpendings"
     [accountFilter]="accountFilter"
     [categoryFilter]="categoryFilter"
+    [nameFilter]="nameFilter"
     [minAmount]="minAmount"
     [maxAmount]="maxAmount"
   ></app-transactions-list>
