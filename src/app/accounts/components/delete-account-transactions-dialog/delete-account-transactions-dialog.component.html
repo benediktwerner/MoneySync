@@ -7,7 +7,7 @@
       What should be done with them?
     </p>
 
-    <mat-form-field>
+    <mat-form-field class="full-width">
       <mat-select [(value)]="action">
         <mat-option [value]="ActionEnum.Delete">Delete them</mat-option>
         <mat-option [value]="ActionEnum.Move">Move them</mat-option>
@@ -15,7 +15,7 @@
     </mat-form-field>
     <br />
 
-    <mat-form-field *ngIf="action == ActionEnum.Move">
+    <mat-form-field class="full-width" *ngIf="action == ActionEnum.Move">
       <mat-select placeholder="Target account" [formControl]="form.controls.targetAccount">
         <mat-option *ngFor="let acc of accounts" [value]="acc.id">
           {{ acc.name }}
