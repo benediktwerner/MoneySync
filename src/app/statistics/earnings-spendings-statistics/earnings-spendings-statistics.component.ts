@@ -48,27 +48,46 @@ export class EarningsSpendingsStatisticsComponent implements AfterViewInit, OnDe
 
       if (this.earningsChart) {
         this.earningsChart.data.labels = Object.keys(this.earnings).map(catId => this.data.categories[catId].name);
-        this.earningsChart.data.datasets[0].data = Object.values(this.earnings);
-        this.earningsChart.data.datasets[0].backgroundColor = genreateColors(Object.keys(this.earnings).length);
+
+        const dataset = this.earningsChart.data.datasets[0];
+        dataset.data = Object.values(this.earnings);
+
+        const colors = genreateColors(dataset.data.length);
+        dataset.backgroundColor = colors;
+        dataset.hoverBackgroundColor = colors;
+        dataset.hoverBorderColor = colors;
+
         this.earningsChart.update();
       }
       if (this.spendingsChart) {
         this.spendingsChart.data.labels = Object.keys(this.spendings).map(catId => this.data.categories[catId].name);
-        this.spendingsChart.data.datasets[0].data = Object.values(this.spendings);
-        this.spendingsChart.data.datasets[0].backgroundColor = genreateColors(Object.keys(this.spendings).length);
+
+        const dataset = this.spendingsChart.data.datasets[0];
+        dataset.data = Object.values(this.spendings);
+
+        const colors = genreateColors(dataset.data.length);
+        dataset.backgroundColor = colors;
+        dataset.hoverBackgroundColor = colors;
+        dataset.hoverBorderColor = colors;
+
         this.spendingsChart.update();
       }
     });
   }
 
   ngAfterViewInit() {
+    const earningsColors = genreateColors(Object.keys(this.earnings).length);
+    const spendingsColors = genreateColors(Object.keys(this.spendings).length);
+
     this.earningsChart = new Chart(this.earningsChartRef.nativeElement, {
       type: 'doughnut',
       data: {
         datasets: [
           {
             data: Object.values(this.earnings),
-            backgroundColor: genreateColors(Object.keys(this.earnings).length),
+            backgroundColor: earningsColors,
+            hoverBackgroundColor: earningsColors,
+            hoverBorderColor: earningsColors,
           },
         ],
         labels: Object.keys(this.earnings).map(catId => this.data.categories[catId].name),
@@ -82,7 +101,9 @@ export class EarningsSpendingsStatisticsComponent implements AfterViewInit, OnDe
         datasets: [
           {
             data: Object.values(this.spendings),
-            backgroundColor: genreateColors(Object.keys(this.earnings).length),
+            backgroundColor: spendingsColors,
+            hoverBackgroundColor: spendingsColors,
+            hoverBorderColor: spendingsColors,
           },
         ],
         labels: Object.keys(this.spendings).map(catId => this.data.categories[catId].name),
