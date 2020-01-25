@@ -1,12 +1,21 @@
 .grid-container {
   display: grid;
-  grid-template-columns: 300px auto;
+  grid-template-columns: auto;
   grid-template-rows: 64px auto;
   grid-template-areas:
-    'header header'
-    'accounts statistics'
-    'accounts transactions';
+    'header'
+    'accounts'
+    'statistics'
+    'transactions';
   grid-gap: 20px;
+
+  @media (min-width: 900px) {
+    grid-template-columns: 300px auto;
+    grid-template-areas:
+      'header header'
+      'accounts statistics'
+      'accounts transactions';
+  }
 
   @media (min-width: 1200px) {
     grid-template-columns: 300px auto 300px;

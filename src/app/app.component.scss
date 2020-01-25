@@ -38,3 +38,13 @@
     margin-right: auto;
   }
 }
+
+.navbar-collapse {
+  transition: max-height 300ms ease;
+  overflow: hidden;
+  max-height: 100vh;
+
+  &.collapsed {
+    max-height: 0;
+  }
+}

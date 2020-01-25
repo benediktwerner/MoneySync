@@ -14,6 +14,8 @@ export interface Item {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  navbarCollapsed: boolean = true;
+
   constructor(private dialog: MatDialog, private snackBar: MatSnackBar, updates: SwUpdate) {
     updates.available.subscribe(() => {
       this.showMessage('A new version is available', 'UPDATE', () =>

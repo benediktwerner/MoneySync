@@ -14,6 +14,7 @@ import { StatisticsModule } from './statistics/statistics.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { AccountsModule } from './accounts/accounts.module';
 import { SettingsModule } from './settings/settings.module';
+import { InitModule } from './init/init.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,6 +32,7 @@ import { SettingsModule } from './settings/settings.module';
     AccountsModule,
     SettingsModule,
     TransactionsModule,
+    InitModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
