@@ -76,7 +76,9 @@ export class TotalChartComponent implements OnDestroy, AfterViewInit {
     let index = 1;
     for (let accId in accData) {
       accData[accId].push({ t: new Date(), y: accTotal[accId] });
-      this.chartData.push(this.generateDataset(this.data.accounts[accId].name, accData[accId], index++));
+      this.chartData.push(
+        this.generateDataset(this.data.accounts[accId].name, accData[accId], index++)
+      );
     }
 
     if (this.chart) {

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { DataService } from 'src/app/data.service';
-import { MatSlideToggleChange, MatSelectChange } from '@angular/material';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-chart-settings',

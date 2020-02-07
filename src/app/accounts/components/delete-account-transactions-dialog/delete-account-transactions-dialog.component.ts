@@ -1,5 +1,6 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DataService, Account } from 'src/app/data.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -44,7 +45,11 @@ export class DeleteAccountTransactionsDialogComponent {
     if (this.action == Action.Move && this.form.invalid) return;
 
     this.data
-      .removeAccount(this.account.id, this.action == Action.Move, this.form.controls.targetAccount.value)
+      .removeAccount(
+        this.account.id,
+        this.action == Action.Move,
+        this.form.controls.targetAccount.value
+      )
       .then(null, err => {
         this.snackBar.open('Failed to delete account', 'OK', { duration: 3000 });
         console.error(err);

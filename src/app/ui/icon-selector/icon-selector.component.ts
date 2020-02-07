@@ -1,6 +1,20 @@
-import { Component, HostBinding, Input, Optional, Self, ElementRef, HostListener } from '@angular/core';
-import { MatFormFieldControl, ErrorStateMatcher } from '@angular/material';
-import { NgControl, ControlValueAccessor, FormControl, NgForm, FormGroupDirective } from '@angular/forms';
+import {
+  Component,
+  HostBinding,
+  Input,
+  Optional,
+  Self,
+  ElementRef,
+  HostListener,
+} from '@angular/core';
+import { MatFormFieldControl } from '@angular/material/form-field';
+import {
+  NgControl,
+  ControlValueAccessor,
+  FormControl,
+  NgForm,
+  FormGroupDirective,
+} from '@angular/forms';
 import { Subject, Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { FocusMonitor } from '@angular/cdk/a11y';
@@ -143,7 +157,10 @@ export class IconSelectorComponent implements MatFormFieldControl<string>, Contr
 
   ngDoCheck() {
     const oldState = this.errorState;
-    const newState = !!(this.ngControl.errors && (this.ngControl.touched || (this.form && this.form.submitted)));
+    const newState = !!(
+      this.ngControl.errors &&
+      (this.ngControl.touched || (this.form && this.form.submitted))
+    );
 
     if (oldState !== newState) {
       this.errorState = newState;

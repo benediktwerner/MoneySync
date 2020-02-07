@@ -1,0 +1,19 @@
+{
+  "hosting": [
+    {
+      "target": "money-sync",
+      "public": "dist/money-sync",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
+}

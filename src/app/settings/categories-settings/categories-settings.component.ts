@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { DataService, Category } from 'src/app/data.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { CategoryDialogComponent } from '../category-dialog/category-dialog.component';
 import { AddCategoryDialogComponent } from '../add-category-dialog/add-category-dialog.component';

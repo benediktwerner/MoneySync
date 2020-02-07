@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
 import { DataService, Account, Category } from '../../../data.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 

@@ -1,5 +1,6 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Account, DataService } from '../../../data.service';
 import { DeletionDialogComponent } from '../../../ui/deletion-dialog/deletion-dialog.component';
 import { EditAccountDialogComponent } from '../edit-account-dialog/edit-account-dialog.component';
@@ -22,7 +23,7 @@ export class AccountDialogComponent {
   onEdit() {
     this.dialog
       .open(EditAccountDialogComponent, { data: this.account })
-      .beforeClose()
+      .beforeClosed()
       .subscribe(result => {
         if (result) this.dialogRef.close();
       });

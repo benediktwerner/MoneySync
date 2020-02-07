@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
 import { DataService, Transaction } from 'src/app/data.service';
 import { Subscription } from 'rxjs';
 import { KeyValue, formatDate } from '@angular/common';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { TransactionDialogComponent } from '../components/transaction-dialog/transaction-dialog.component';
 
 @Component({
@@ -23,7 +23,7 @@ export class TransactionsListComponent implements OnChanges, OnDestroy {
   transactionsByDate: KeyValue<string, Transaction>[];
   private subscription: Subscription;
 
-  constructor(private dialog: MatDialog, private data: DataService) {
+  constructor(private dialog: MatDialog, public data: DataService) {
     this.subscription = this.data.onTransactionsChange.subscribe(this.setValuesFromTransactions.bind(this));
   }
 

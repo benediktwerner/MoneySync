@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
+import {
+  AngularFirestore,
+  AngularFirestoreDocument,
+  AngularFirestoreCollection,
+} from '@angular/fire/firestore';
 import { BehaviorSubject } from 'rxjs';
+import 'firebase/firestore';
 
 declare global {
   interface Date {
@@ -9,7 +14,9 @@ declare global {
 }
 
 Date.prototype.hasSameMonthAs = function(other: Date) {
-  return this.getUTCFullYear() == other.getUTCFullYear() && this.getUTCMonth() == other.getUTCMonth();
+  return (
+    this.getUTCFullYear() == other.getUTCFullYear() && this.getUTCMonth() == other.getUTCMonth()
+  );
 };
 
 export interface Dict<T> {
@@ -54,7 +61,12 @@ export interface Transaction extends TransactionInternal {
   providedIn: 'root',
 })
 export class DataService {
-  user: User = { defaultAccount: '', chartsStartAtZero: true, chartsFill: false, chartsLineStyle: 'round' };
+  user: User = {
+    defaultAccount: '',
+    chartsStartAtZero: true,
+    chartsFill: false,
+    chartsLineStyle: 'round',
+  };
   accounts: Dict<Account> = {};
   categories: Dict<Category> = {};
   transactions: Dict<Transaction> = {};
@@ -167,7 +179,9 @@ export class DataService {
     if (moveTransactions) {
       Object.values(this.transactions).forEach(trans => {
         if (trans.accountId == id)
-          batch.update(this.transactionsCollection.doc(trans.id).ref, { accountId: targetAccountId });
+          batch.update(this.transactionsCollection.doc(trans.id).ref, {
+            accountId: targetAccountId,
+          });
       });
     } else {
       Object.values(this.transactions).forEach(trans => {
@@ -177,7 +191,8 @@ export class DataService {
 
     if (this.user.defaultAccount == id) {
       const accounts = Object.values(this.accounts);
-      if (accounts.length > 1) batch.set(this.userDoc.ref, { defaultAccount: accounts.find(acc => acc.id != id).id });
+      if (accounts.length > 1)
+        batch.set(this.userDoc.ref, { defaultAccount: accounts.find(acc => acc.id != id).id });
       else batch.set(this.userDoc.ref, { defaultAccount: '' });
     }
 

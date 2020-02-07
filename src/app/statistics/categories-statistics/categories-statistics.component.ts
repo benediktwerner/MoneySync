@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { DataService, Transaction, Dict, Category } from 'src/app/data.service';
+import { DataService, Transaction, Dict } from 'src/app/data.service';
 import { Chart, ChartPoint, ChartDataSets } from 'chart.js';
 import { Subscription } from 'rxjs';
 
@@ -70,7 +70,9 @@ export class CategoriesStatisticsComponent {
     let index = 0;
     this.chartData = [];
     for (let catId in catData) {
-      this.chartData.push(this.generateDataset(this.data.categories[catId].name, catData[catId], index++));
+      this.chartData.push(
+        this.generateDataset(this.data.categories[catId].name, catData[catId], index++)
+      );
     }
 
     if (this.chart) {
@@ -107,7 +109,9 @@ export class CategoriesStatisticsComponent {
           callbacks: {
             label: function(tooltipItem, data) {
               let label = data.datasets[tooltipItem.datasetIndex].label + ': ';
-              let point = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] as ChartPoint;
+              let point = data.datasets[tooltipItem.datasetIndex].data[
+                tooltipItem.index
+              ] as ChartPoint;
               return label + point.r + '€';
             },
           },

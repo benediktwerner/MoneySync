@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Account, DataService } from '../data.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { AccountDialogComponent } from '../accounts/components/account-dialog/account-dialog.component';
 import { AddAccountDialogComponent } from '../accounts/components/add-account-dialog/add-account-dialog.component';
 

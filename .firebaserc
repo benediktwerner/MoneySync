@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "money-sync": {
+      "hosting": {
+        "money-sync": [
+          "money-sync"
+        ]
+      }
+    }
+  }
+}

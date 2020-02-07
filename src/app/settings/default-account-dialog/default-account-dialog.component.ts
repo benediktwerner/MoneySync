@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { DataService, Account } from 'src/app/data.service';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({

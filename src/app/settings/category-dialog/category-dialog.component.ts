@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { DataService, Category } from 'src/app/data.service';
 import { DeletionDialogComponent } from 'src/app/ui/deletion-dialog/deletion-dialog.component';
 import { EditCategoryDialogComponent } from '../edit-category-dialog/edit-category-dialog.component';
@@ -20,7 +20,7 @@ export class CategoryDialogComponent {
   onEdit() {
     this.dialog
       .open(EditCategoryDialogComponent, { data: this.category })
-      .beforeClose()
+      .beforeClosed()
       .subscribe(result => {
         if (result) this.dialogRef.close();
       });

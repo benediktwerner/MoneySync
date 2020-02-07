@@ -25,9 +25,9 @@ export class EarningsSpendingsStatisticsComponent implements AfterViewInit, OnDe
 
   private earningsChart: Chart;
   private spendingsChart: Chart;
-  private earnings: Dict<number> = {};
-  private spendings: Dict<number> = {};
   private subscription: Subscription;
+  public earnings: Dict<number> = {};
+  public spendings: Dict<number> = {};
 
   constructor(public data: DataService) {
     this.subscription = data.onTransactionsChange.subscribe(transactions => {
@@ -47,7 +47,9 @@ export class EarningsSpendingsStatisticsComponent implements AfterViewInit, OnDe
       }
 
       if (this.earningsChart) {
-        this.earningsChart.data.labels = Object.keys(this.earnings).map(catId => this.data.categories[catId].name);
+        this.earningsChart.data.labels = Object.keys(this.earnings).map(
+          catId => this.data.categories[catId].name
+        );
 
         const dataset = this.earningsChart.data.datasets[0];
         dataset.data = Object.values(this.earnings);
@@ -60,7 +62,9 @@ export class EarningsSpendingsStatisticsComponent implements AfterViewInit, OnDe
         this.earningsChart.update();
       }
       if (this.spendingsChart) {
-        this.spendingsChart.data.labels = Object.keys(this.spendings).map(catId => this.data.categories[catId].name);
+        this.spendingsChart.data.labels = Object.keys(this.spendings).map(
+          catId => this.data.categories[catId].name
+        );
 
         const dataset = this.spendingsChart.data.datasets[0];
         dataset.data = Object.values(this.spendings);

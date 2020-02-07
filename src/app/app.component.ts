@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
-import { MatSnackBar, MatDialog } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar/';
+import { MatDialog } from '@angular/material/dialog';
 import { AddTransactionDialogComponent } from './transactions/components/add-transaction-dialog/add-transaction-dialog.component';
 
 export interface Item {
