@@ -7,8 +7,8 @@ export function initCharts(initChartsService: InitChartsService) {
 
 @NgModule({
   providers: [
-    InitChartsService,
-    { provide: APP_INITIALIZER, useFactory: initCharts, deps: [InitChartsService], multi: true },
+    // InitChartsService,
+    // { provide: APP_INITIALIZER, useFactory: initCharts, deps: [InitChartsService], multi: true },
   ],
 })
 export class InitModule {}
