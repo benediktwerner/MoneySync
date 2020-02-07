@@ -4,8 +4,9 @@ import {
   AngularFirestoreDocument,
   AngularFirestoreCollection,
 } from '@angular/fire/firestore';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import 'firebase/firestore';
+import { AuthService } from './auth.service';
 
 declare global {
   interface Date {
@@ -85,44 +86,55 @@ export class DataService {
   private categoriesCollection: AngularFirestoreCollection<Category>;
   private transactionsCollection: AngularFirestoreCollection<TransactionInternal>;
 
-  constructor(private db: AngularFirestore) {
-    this.userDoc = db.doc<User>('users/bene');
-    this.accountsCollection = this.userDoc.collection<Account>('accounts');
-    this.categoriesCollection = this.userDoc.collection<Category>('categories');
-    this.transactionsCollection = this.userDoc.collection<TransactionInternal>('transactions');
+  private subscriptions: Subscription;
 
+  constructor(private db: AngularFirestore, auth: AuthService) {
     this.onUserChange = new BehaviorSubject(this.user);
     this.onAccountsChange = new BehaviorSubject(Object.values(this.accounts));
     this.onCategoriesChange = new BehaviorSubject(Object.values(this.categories));
     this.onTransactionsChange = new BehaviorSubject(Object.values(this.transactions));
 
-    this.userDoc.valueChanges().subscribe(user => {
-      Object.assign(this.user, user);
-      this.onUserChange.next(user);
-    });
-    this.accountsCollection.valueChanges().subscribe(accs => {
-      const accounts = {};
-      accs.forEach(acc => (accounts[acc.id] = acc));
-      this.accounts = accounts;
-      this.generateBalances();
-      this.onAccountsChange.next(Object.values(accounts));
-    });
-    this.categoriesCollection.valueChanges().subscribe(cats => {
-      const categories = {};
-      cats.forEach(cat => (categories[cat.id] = cat));
-      this.categories = categories;
-      this.onCategoriesChange.next(Object.values(categories));
-    });
-    this.transactionsCollection.valueChanges().subscribe(trans => {
-      const transactions = {};
-      trans.forEach(t => {
-        t.date = t.date.toDate();
-        transactions[t.id] = t;
+    auth.user.subscribe(user => {
+      this.userDoc = db.doc<User>('users/' + user.uid);
+      this.accountsCollection = this.userDoc.collection<Account>('accounts');
+      this.categoriesCollection = this.userDoc.collection<Category>('categories');
+      this.transactionsCollection = this.userDoc.collection<TransactionInternal>('transactions');
+
+      if (this.subscriptions) this.subscriptions.unsubscribe();
+
+      const userSub = this.userDoc.valueChanges().subscribe(user => {
+        Object.assign(this.user, user);
+        this.onUserChange.next(this.user);
       });
-      this.transactions = transactions;
-      this.generateBalances();
-      this.onTransactionsChange.next(Object.values(this.transactions));
-      this.onAccountsChange.next(Object.values(this.accounts));
+      const accsSub = this.accountsCollection.valueChanges().subscribe(accs => {
+        const accounts = {};
+        accs.forEach(acc => (accounts[acc.id] = acc));
+        this.accounts = accounts;
+        this.generateBalances();
+        this.onAccountsChange.next(Object.values(accounts));
+      });
+      const categorySub = this.categoriesCollection.valueChanges().subscribe(cats => {
+        const categories = {};
+        cats.forEach(cat => (categories[cat.id] = cat));
+        this.categories = categories;
+        this.onCategoriesChange.next(Object.values(categories));
+      });
+      const transSub = this.transactionsCollection.valueChanges().subscribe(trans => {
+        const transactions = {};
+        trans.forEach(t => {
+          t.date = t.date.toDate();
+          transactions[t.id] = t;
+        });
+        this.transactions = transactions;
+        this.generateBalances();
+        this.onTransactionsChange.next(Object.values(this.transactions));
+        this.onAccountsChange.next(Object.values(this.accounts));
+      });
+
+      this.subscriptions = userSub;
+      this.subscriptions.add(accsSub);
+      this.subscriptions.add(categorySub);
+      this.subscriptions.add(transSub);
     });
   }
 
@@ -192,8 +204,8 @@ export class DataService {
     if (this.user.defaultAccount == id) {
       const accounts = Object.values(this.accounts);
       if (accounts.length > 1)
-        batch.set(this.userDoc.ref, { defaultAccount: accounts.find(acc => acc.id != id).id });
-      else batch.set(this.userDoc.ref, { defaultAccount: '' });
+        batch.update(this.userDoc.ref, { defaultAccount: accounts.find(acc => acc.id != id).id });
+      else batch.update(this.userDoc.ref, { defaultAccount: '' });
     }
 
     batch.delete(this.accountsCollection.doc<Account>(id).ref);

@@ -1,6 +1,10 @@
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @import '~normalize.css/normalize.css';
 
+html, body {
+  min-height: 100vh;
+}
+
 a {
   text-decoration: none;
 }

@@ -3,6 +3,7 @@ import { SwUpdate } from '@angular/service-worker';
 import { MatSnackBar } from '@angular/material/snack-bar/';
 import { MatDialog } from '@angular/material/dialog';
 import { AddTransactionDialogComponent } from './transactions/components/add-transaction-dialog/add-transaction-dialog.component';
+import { AuthService } from './auth.service';
 
 export interface Item {
   name: string;
@@ -17,7 +18,12 @@ export interface Item {
 export class AppComponent {
   navbarCollapsed: boolean = true;
 
-  constructor(private dialog: MatDialog, private snackBar: MatSnackBar, updates: SwUpdate) {
+  constructor(
+    public auth: AuthService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    updates: SwUpdate
+  ) {
     updates.available.subscribe(() => {
       this.showMessage('A new version is available', 'UPDATE', () =>
         updates.activateUpdate().then(() => document.location.reload())
